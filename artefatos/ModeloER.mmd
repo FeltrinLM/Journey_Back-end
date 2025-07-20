@@ -1,0 +1,45 @@
+erDiagram
+    COLECAO ||--o{ ESTAMPA : contem
+    COLECAO ||--o{ CHAVEIRO : contem
+    ESTAMPA ||--o{ ESTAMPA_PECA : associa
+    PECA ||--o{ ESTAMPA_PECA : compoe
+
+
+    COLECAO {
+        int colecao_id PK
+        string nome
+        date data_inicio
+        date data_fim
+    }
+
+    ESTAMPA {
+        int estampa_id PK
+        string nome
+        int quantidade
+        int colecao_id FK
+    }
+
+    PECA {
+        int peca_id PK
+        string tipo
+        string tamanho
+        string cor
+        int quantidade
+    }
+
+    ESTAMPA_PECA {
+        int estampa_id FK
+        int peca_id FK
+    }
+
+    ADESIVO{
+        int adesivo_id PK
+        string modelo
+        boolean cromatico
+    }
+
+    CHAVEIRO{
+        int chaveiro_id PK
+        string modelo
+        int colecao_id FK
+    }
