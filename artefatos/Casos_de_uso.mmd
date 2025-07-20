@@ -1,0 +1,93 @@
+graph TD
+
+%% Atores e herança
+    Usuario((Usuário))
+    Admin((Administrador))
+    Funcionario((Funcionário))
+    Admin --> Usuario
+    Funcionario --> Usuario
+
+%% Subgrafo: Autenticação
+    subgraph Autenticação
+        Login[Tela de Login]
+        Condicional{Usuário existe no sistema?}
+        PlaceholderLogin[Login com admin placeholder]
+    end
+
+%% Subgrafo: Dashboard e Navegação
+    subgraph Dashboard_Geral[Dashboard e Navegação]
+        Dashboard[Dashboard Principal]
+        TelaConta[Tela da Conta]
+        TelaHistorico[Tela de Histórico de Alterações]
+        CadastrarUsuario[Tela de Cadastro de Usuário]
+    end
+
+%% Subgrafo: Visualização de Itens
+    subgraph Listas_de_Itens[Visualização de Itens]
+        ListaPecas[Lista de Peças]
+        ListaColecoes[Lista de Coleções]
+        ListaAdesivos[Lista de Adesivos]
+        ListaChaveiros[Lista de Chaveiros]
+        ListaEstampas[Lista de Estampas]
+    end
+
+%% Subgrafo: Formulários de Edição e Criação
+    subgraph Formularios[Formulários de Cadastro e Edição]
+        AdicionarItem[Formulário de Adição de Item]
+        EditarPeca[Editar Peça]
+        EditarColecao[Editar Coleção]
+        EditarAdesivo[Editar Adesivo]
+        EditarChaveiro[Editar Chaveiro]
+        EditarEstampa[Editar Estampa]
+        ExcluirItem[Excluir Item]
+    end
+
+%% Fluxo de autenticação
+    Usuario --> Login
+    Login --> Condicional
+    Condicional -->|Sim| Dashboard
+    Condicional -->|Não| PlaceholderLogin
+    PlaceholderLogin --> Dashboard
+
+%% Acesso via Dashboard
+    Dashboard --> TelaConta
+    Dashboard --> TelaHistorico
+    Dashboard --> ListaPecas
+    Dashboard --> ListaColecoes
+    Dashboard --> ListaAdesivos
+    Dashboard --> ListaChaveiros
+    Dashboard --> ListaEstampas
+
+%% Ações nas listas
+    ListaPecas --> AdicionarItem
+    ListaColecoes --> AdicionarItem
+    ListaAdesivos --> AdicionarItem
+    ListaChaveiros --> AdicionarItem
+    ListaEstampas --> AdicionarItem
+
+    ListaPecas --> EditarPeca
+    ListaColecoes --> EditarColecao
+    ListaAdesivos --> EditarAdesivo
+    ListaChaveiros --> EditarChaveiro
+    ListaEstampas --> EditarEstampa
+
+    ListaPecas --> ExcluirItem
+    ListaColecoes --> ExcluirItem
+    ListaAdesivos --> ExcluirItem
+    ListaChaveiros --> ExcluirItem
+    ListaEstampas --> ExcluirItem
+
+%% Cadastro de usuário
+    TelaConta --> CadastrarUsuario
+
+%% Permissões
+    Admin --> TelaHistorico
+    Funcionario --> TelaHistorico
+    Admin --> Dashboard
+    Funcionario --> Dashboard
+    Admin --> ExcluirItem
+
+    TelaHistorico -->|Admin vê tudo| Admin
+    TelaHistorico -->|Funcionário vê só alterações próprias| Funcionario
+    TelaConta -->|Pode alterar credenciais ou deslogar| Usuario
+    CadastrarUsuario -->|Somente administradores| Admin
