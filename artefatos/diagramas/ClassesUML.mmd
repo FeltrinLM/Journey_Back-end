@@ -1,0 +1,82 @@
+classDiagram
+
+    class Colecao {
+        - int id
+        - String nome
+        - LocalDate dataInicio
+        - LocalDate dataFim
+        +getId(): int
+        +setId(int): void
+        +getNome(): String
+        +setNome(String): void
+        +getDataInicio(): LocalDate
+        +setDataInicio(LocalDate): void
+        +getDataFim(): LocalDate
+        +setDataFim(LocalDate): void
+        +getEstampas(): List<Estampa>
+        +getChaveiros(): List<Chaveiro>
+    }
+
+    class Estampa {
+        - int id
+        - String nome
+        - int quantidade
+        - Colecao colecao
+        +getId(): int
+        +setId(int): void
+        +getNome(): String
+        +setNome(String): void
+        +getQuantidade(): int
+        +setQuantidade(int): void
+        +getColecao(): Colecao
+        +setColecao(Colecao): void
+    }
+
+    class Peca {
+        - int id
+        - String tipo
+        - String tamanho
+        - String cor
+        - int quantidade
+        +getId(): int
+        +setId(int): void
+        +getTipo(): String
+        +setTipo(String): void
+        +getTamanho(): String
+        +setTamanho(String): void
+        +getCor(): String
+        +setCor(String): void
+        +getQuantidade(): int
+        +setQuantidade(int): void
+    }
+
+
+    class Chaveiro {
+        - int id
+        - String modelo
+        - Colecao colecao
+        +getId(): int
+        +setId(int): void
+        +getModelo(): String
+        +setModelo(String): void
+        +getColecao(): Colecao
+        +setColecao(Colecao): void
+    }
+
+    class Adesivo {
+        - int id
+        - String modelo
+        - boolean cromatico
+        +getId(): int
+        +setId(int): void
+        +getModelo(): String
+        +setModelo(String): void
+        +isCromatico(): boolean
+        +setCromatico(boolean): void
+    }
+
+
+Colecao "1" --> "*" Estampa : contem
+Colecao "1" --> "*" Chaveiro : contem
+
+

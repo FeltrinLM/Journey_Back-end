@@ -1,9 +1,6 @@
 erDiagram
     COLECAO ||--o{ ESTAMPA : contem
     COLECAO ||--o{ CHAVEIRO : contem
-    ESTAMPA ||--o{ ESTAMPA_PECA : associa
-    PECA ||--o{ ESTAMPA_PECA : compoe
-
 
     COLECAO {
         int colecao_id PK
@@ -27,10 +24,6 @@ erDiagram
         int quantidade
     }
 
-    ESTAMPA_PECA {
-        int estampa_id FK
-        int peca_id FK
-    }
 
     ADESIVO{
         int adesivo_id PK
