@@ -81,13 +81,10 @@ graph TD
     TelaConta --> CadastrarUsuario
 
 %% Permissões
-    Admin --> TelaHistorico
-    Funcionario --> TelaHistorico
     Admin --> Dashboard
     Funcionario --> Dashboard
     Admin --> ExcluirItem
 
-    TelaHistorico -->|Admin vê tudo| Admin
-    TelaHistorico -->|Funcionário vê só alterações próprias| Funcionario
+    TelaHistorico -->|Vê tudo| Usuario
     TelaConta -->|Pode alterar credenciais ou deslogar| Usuario
     CadastrarUsuario -->|Somente administradores| Admin

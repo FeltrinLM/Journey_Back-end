@@ -18,7 +18,7 @@ A implantação desse sistema proporcionará ao usuário uma gestão mais eficie
 
 ## Objetivo (SMART):
 
-Desenvolver, em até 5 meses, um sistema web de gerenciamento de estoque para a empresa Journey. A aplicação deve permitir login e cadastro de usuários com dois níveis de permissão (funcionário e administrador), controle de ações conforme o perfil, visualização diferenciada do histórico de alterações, cadastro e edição de peças, coleções, estampas, chaveiros e adesivos, além da prevenção de duplicidade de itens, oferecendo uma interface intuitiva e compatível com computadores desktop.
+Desenvolver, em até 5 meses, um sistema web de gerenciamento de estoque para a empresa Journey. A aplicação deve permitir login e cadastro de usuários com dois níveis de permissão (funcionário e administrador), controle de ações conforme o perfil, visualização do histórico de alterações, cadastro e edição de peças, coleções, estampas, chaveiros e adesivos, além da prevenção de duplicidade de itens, oferecendo uma interface intuitiva e compatível com computadores desktop.
 
 Para garantir a segurança e o controle de acesso desde o início, o sistema deverá criar automaticamente um **usuário administrador padrão** na primeira execução, caso não exista nenhum usuário registrado. O cadastro de novos usuários será restrito a administradores autenticados, evitando cadastros públicos.
 
@@ -39,7 +39,6 @@ Como medida de segurança, o sistema criará automaticamente um **usuário admin
 - **(RF)** O sistema deve impedir a existência de itens duplicados nas tabelas
 - **(RF)** O sistema deve possuir uma página de histórico, onde será possível visualizar todas as alterações feitas nas tabelas
 - **(RN)** O sistema deve admitir dois níveis de permissão de usuário: Funcionário e Administrador
-- **(RN)** Funcionários podem visualizar apenas alterações feitas por si próprios; Administradores visualizam todo o histórico
 - **(RN)** Funcionários podem adicionar e editar itens; Administradores podem adicionar, editar e remover itens
 - **(RNF)** O sistema deve rodar na web
 - **(RNF)** O sistema deve funcionar em computadores, não sendo necessário ser responsivo para dispositivos móveis
@@ -67,17 +66,15 @@ Alencar Machado (avaliador acadêmico)
 
 ## Premissas e restrições:
 
-### premissas:
-
+**Premissas:**
 - O cliente (ou usuário final) estará disponível para fornecer feedback ao longo do desenvolvimento.
-- A conexão com o banco de dados será estável e disponível durante os testes.
-- O desenvolvedor terá tempo semanal para se dedicar ao projeto.
-- Os requisitos informados inicialmente não sofrerão alterações drásticas.
+- A conexão com o banco de dados será estável e acessível durante os testes.
+- O desenvolvedor terá disponibilidade semanal para se dedicar ao projeto.
+- Os requisitos definidos inicialmente não sofrerão alterações drásticas.
+- O sistema será utilizado em ambientes desktop, não exigindo responsividade para dispositivos móveis.
 
-### Restrições:
-
-- O sistema deve ser entregue em até 5 meses.
+**Restrições:**
+- O sistema deve ser entregue no prazo máximo de 5 meses.
 - O projeto será desenvolvido por apenas uma pessoa.
-- Apenas ferramentas gratuitas e de código aberto podem ser utilizadas.
-- O sistema não precisa ser responsivo (foco só em desktop).
-- O sistema deve rodar via navegador (web-based).
+- Apenas ferramentas gratuitas ou com licenças educacionais poderão ser utilizadas.
+- O sistema deve funcionar via navegador (aplicação web-based).
