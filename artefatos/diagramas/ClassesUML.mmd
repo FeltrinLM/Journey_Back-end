@@ -1,12 +1,12 @@
 classDiagram
 
     class Colecao {
-        - int id
+        - int colecao_id
         - String nome
         - LocalDate dataInicio
         - LocalDate dataFim
-        +getId(): int
-        +setId(int): void
+        +getColecao_Id(): int
+        +setColecao_Id(int): void
         +getNome(): String
         +setNome(String): void
         +getDataInicio(): LocalDate
@@ -18,12 +18,12 @@ classDiagram
     }
 
     class Estampa {
-        - int id
+        - int estampa_id
         - String nome
         - int quantidade
         - Colecao colecao
-        +getId(): int
-        +setId(int): void
+        +getEstampa_id(): int
+        +setEstampa_id(int): void
         +getNome(): String
         +setNome(String): void
         +getQuantidade(): int
@@ -33,13 +33,13 @@ classDiagram
     }
 
     class Peca {
-        - int id
+        - int peca_id
         - String tipo
         - String tamanho
         - String cor
         - int quantidade
-        +getId(): int
-        +setId(int): void
+        +getPeca_id(): int
+        +setPeca_id(int): void
         +getTipo(): String
         +setTipo(String): void
         +getTamanho(): String
@@ -52,31 +52,31 @@ classDiagram
 
 
     class Chaveiro {
-        - int id
-        - String modelo
+        - int chaveiro_id
+        - String chaveiro_modelo
         - Colecao colecao
-        +getId(): int
-        +setId(int): void
-        +getModelo(): String
-        +setModelo(String): void
+        +getChaveiro_id(): int
+        +setChaveiro_id(int): void
+        +getChaveiro_modelo(): String
+        +setChaveiro_modelo(String): void
         +getColecao(): Colecao
         +setColecao(Colecao): void
     }
 
     class Adesivo {
-        - int id
-        - String modelo
+        - int adesivo_id
+        - String adesivo_modelo
         - boolean cromatico
-        +getId(): int
-        +setId(int): void
-        +getModelo(): String
-        +setModelo(String): void
+        +getAdesivo_id(): int
+        +setAdesivo_id(int): void
+        +getAdesivo_modelo(): String
+        +setAdesivo_modelo(String): void
         +isCromatico(): boolean
         +setCromatico(boolean): void
     }
 
 
-Colecao "1" --> "*" Estampa : contem
-Colecao "1" --> "*" Chaveiro : contem
+Colecao "1" --> "n" Estampa : contem
+Colecao "1" --> "n" Chaveiro : contem
 
 
