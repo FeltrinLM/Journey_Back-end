@@ -75,8 +75,31 @@ classDiagram
         +setCromatico(boolean): void
     }
 
+    class Usuario {
+        - int usuario_id
+        - String nome
+        - String senha
+        - TipoUsuario tipo
+        +Usuario()
+        +Usuario(String nome, String senha, TipoUsuario tipo)
+        +getUsuario_id(): int
+        +setUsuario_id(int): void
+        +getNome(): String
+        +setNome(String): void
+        +getSenha(): String
+        +setSenha(String): void
+        +getTipo(): TipoUsuario
+        +setTipo(TipoUsuario): void
+    }
+
+    class TipoUsuario {
+        <<enumeration>>
+        ADMINISTRADOR
+        FUNCIONARIO
+        }
 
 Colecao "1" --> "n" Estampa : contem
 Colecao "1" --> "n" Chaveiro : contem
+Usuario --> TipoUsuario : tipo
 
 

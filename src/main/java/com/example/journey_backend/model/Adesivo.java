@@ -12,6 +12,15 @@ public class Adesivo {
     private String adesivo_modelo;
     private boolean cromatico;
 
+    // Construtor vazio (obrigatório para JPA).
+    public Adesivo() {}
+
+    // Construtor com parâmetros.
+    public Adesivo(String adesivo_modelo, boolean cromatico) {
+        this.adesivo_modelo = adesivo_modelo;
+        this.cromatico = cromatico;
+    }
+
     // Getters e Setters
 
     public int getAdesivo_id() {

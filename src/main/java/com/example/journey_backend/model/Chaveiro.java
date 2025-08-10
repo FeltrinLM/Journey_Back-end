@@ -15,6 +15,15 @@ public class Chaveiro {
     @JoinColumn(name = "colecao_id") //indica a foreign key.
     private Colecao colecao;
 
+    // Construtor vazio (obrigatório para JPA).
+    public Chaveiro() {}
+
+    // Construtor com parâmetros.
+    public Chaveiro(String chaveiro_modelo, Colecao colecao) {
+        this.chaveiro_modelo = chaveiro_modelo;
+        this.colecao = colecao;
+    }
+
     // Getters e Setters
 
     public int getChaveiro_id() {

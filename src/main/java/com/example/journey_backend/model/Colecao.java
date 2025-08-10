@@ -24,6 +24,16 @@ public class Colecao {
     private List<Chaveiro> chaveiros;
 
 
+    // Construtor vazio (obrigatório para JPA).
+    public Colecao() {}
+
+    // Construtor com parâmetros.
+    public Colecao(String nome, LocalDate dataInicio, LocalDate dataFim) {
+        this.nome = nome;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+    }
+
     // Getters e Setters
 
 

@@ -14,6 +14,19 @@ public class Peca {
     private String cor;
     private int quantidade;
 
+
+    // Construtor vazio (obrigatório para JPA).
+    public Peca() {}
+
+    // Construtor com parâmetros.
+    public Peca(String tipo, String tamanho, String cor, int quantidade) {
+        this.tipo = tipo;
+        this.tamanho = tamanho;
+        this.cor = cor;
+        this.quantidade = quantidade;
+    }
+
+
     // Getters e Setters
 
     public int getPeca_id() {

@@ -16,6 +16,18 @@ public class Estampa {
     @JoinColumn(name = "colecao_id") //indica a foreign key.
     private Colecao colecao;
 
+
+    // Construtor vazio (obrigatório para JPA).
+    public Estampa() {}
+
+    // Construtor com parâmetros.
+    public Estampa(String nome, int quantidade, Colecao colecao) {
+        this.nome = nome;
+        this.quantidade = quantidade;
+        this.colecao = colecao;
+    }
+
+
     // Getters e Setters
 
     public int getEstampa_id() {

@@ -2,6 +2,13 @@ erDiagram
     COLECAO ||--o{ ESTAMPA : contem
     COLECAO ||--o{ CHAVEIRO : contem
 
+    USUARIO {
+        int usuario_id PK
+        string nome
+        string senha
+        string tipo  "ADMINISTRADOR|FUNCIONARIO"
+    }
+
     COLECAO {
         int colecao_id PK
         string nome
