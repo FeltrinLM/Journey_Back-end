@@ -1,5 +1,6 @@
 classDiagram
 
+%%Models
     class Colecao {
         - int colecao_id
         - String nome
@@ -101,5 +102,131 @@ classDiagram
 Colecao "1" --> "n" Estampa : contem
 Colecao "1" --> "n" Chaveiro : contem
 Usuario --> TipoUsuario : tipo
+
+%%Repositorys
+
+    class ColecaoRepository {
+    }
+
+    class EstampaRepository {
+    }
+
+    class PecaRepository {
+    }
+
+    class ChaveiroRepository {
+    }
+
+    class AdesivoRepository {
+    }
+
+    class UsuarioRepository {
+    }
+
+%%Services
+
+    class ColecaoService {
+    }
+
+    class EstampaService {
+    }
+
+    class PecaService {
+    }
+
+    class ChaveiroService {
+    }
+
+    class AdesivoService {
+    }
+
+    class UsuarioService {
+    }
+
+%%Mappers
+
+    class ColecaoMapper {
+    }
+
+    class EstampaMapper{
+    }
+
+    class PecaMapper {
+    }
+
+
+    class ChaveiroMapper {
+    }
+
+    class AdesivoMapper {
+    }
+
+    class UsuarioMapper {
+    }
+
+%%Controllers
+
+    class ColecaoController {
+    }
+
+    class EstampaController {
+    }
+
+    class PecaController {
+    }
+
+    class ChaveiroController {
+    }
+
+    class AdesivoController {
+    }
+
+    class UsuarioController {
+    }
+
+%%Relacoes
+
+AdesivoController -->AdesivoService : chama
+AdesivoService -->AdesivoRepository : persiste/busca
+AdesivoService -->AdesivoMapper : converteDTO<->Model
+AdesivoRepository -->Adesivo: trabalha com a entidade
+AdesivoMapper --> Adesivo
+AdesivoMapper --> AdesivoDTO
+
+ColecaoController -->ColecaoService : chama
+ColecaoService -->ColecaoRepository : persiste/busca
+ColecaoService -->ColecaoMapper : converteDTO<->Model
+ColecaoRepository -->Colecao: trabalha com a entidade
+ColecaoMapper --> Colecao
+ColecaoMapper --> ColecaoDTO
+
+EstampaController -->EstampaService : chama
+EstampaService -->EstampaRepository : persiste/busca
+EstampaService -->EstampaMapper : converteDTO<->Model
+EstampaRepository -->Estampa: trabalha com a entidade
+EstampaMapper --> Estampa
+EstampaMapper --> EstampaDTO
+
+PecaController -->PecaService : chama
+PecaService -->PecaRepository : persiste/busca
+PecaService -->PecaMapper : converteDTO<->Model
+PecaRepository -->Peca: trabalha com a entidade
+PecaMapper -->Peca
+PecaMapper --> PecaDTO
+
+ChaveiroController -->ChaveiroService : chama
+ChaveiroService -->ChaveiroRepository : persiste/busca
+ChaveiroService -->ChaveiroMapper : converteDTO<->Model
+ChaveiroRepository -->Chaveiro: trabalha com a entidade
+ChaveiroMapper --> Chaveiro
+ChaveiroMapper --> ChaveiroDTO
+
+UsuarioController -->UsuarioService : chama
+UsuarioService -->UsuarioRepository : persiste/busca
+UsuarioService -->UsuarioMapper : converteDTO<->Model
+UsuarioRepository -->Usuario: trabalha com a entidade
+UsuarioMapper --> Usuario
+UsuarioMapper --> UsuarioDTO
+
 
 
