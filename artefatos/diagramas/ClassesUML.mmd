@@ -97,136 +97,342 @@ classDiagram
         <<enumeration>>
         ADMINISTRADOR
         FUNCIONARIO
-        }
+    }
 
-Colecao "1" --> "n" Estampa : contem
-Colecao "1" --> "n" Chaveiro : contem
-Usuario --> TipoUsuario : tipo
+    Colecao "1" --> "n" Estampa : contem
+    Colecao "1" --> "n" Chaveiro : contem
+    Usuario --> TipoUsuario : tipo
 
 %%Repositorys
 
     class ColecaoRepository {
+        <<interface>>
+        + save(Colecao): Colecao
+        + findAll(): List<Colecao>
+        + findById(int): Optional<Colecao>
+        + deleteById(int): void
     }
 
     class EstampaRepository {
+        <<interface>>
+        +findAll(): List<Estampa>
+        +findById(int): Optional<Estampa>
+        +save(Estampa): Estampa
+        +deleteById(int): void
     }
 
     class PecaRepository {
+        <<interface>>
+        +findAll(): List<Peca>
+        +findById(int): Optional<Peca>
+        +save(Peca): Peca
+        +deleteById(int): void
     }
 
     class ChaveiroRepository {
+        <<interface>>
+        +findAll(): List<Chaveiro>
+        +findById(int): Optional<Chaveiro>
+        +save(Chaveiro): Chaveiro
+        +deleteById(int): void
     }
 
     class AdesivoRepository {
+        <<interface>>
+        +findAll(): List<Adesivo>
+        +findById(int): Optional<Adesivo>
+        +save(Adesivo): Adesivo
+        +deleteById(int): void
     }
 
     class UsuarioRepository {
+        <<interface>>
+        +Optional<Usuario> findByNome(String nome)
+        +boolean existsByNome(String nome)
+        +Usuario save(Usuario)
+        +void deleteById(int id)
+        +Optional<Usuario> findById(int id)
+        +List<Usuario> findAll()
     }
 
 %%Services
 
     class ColecaoService {
+        - ColecaoRepository repository
+        - ColecaoMapper mapper
+        + listarColecoes(): List<ColecaoDTO>
+        + salvarColecao(ColecaoDTO): ColecaoDTO
+        + editarColecao(ColecaoDTO): ColecaoDTO
+        + removerColecao(int): void
     }
 
     class EstampaService {
+        - EstampaRepository estampaRepository
+        - EstampaMapper estampaMapper
+        +List<EstampaDTO> getAll()
+        +EstampaDTO getById(int)
+        +EstampaDTO create(EstampaDTO)
+        +EstampaDTO update(int, EstampaDTO)
+        +void delete(int)
     }
 
     class PecaService {
+        - PecaRepository pecaRepository
+        - PecaMapper pecaMapper
+        +List<PecaDTO> getAll()
+        +PecaDTO getById(int)
+        +PecaDTO create(PecaDTO)
+        +PecaDTO update(int, PecaDTO)
+        +void delete(int)
     }
 
     class ChaveiroService {
+        - ChaveiroRepository chaveiroRepository
+        - ChaveiroMapper chaveiroMapper
+        +List<ChaveiroDTO> getAll()
+        +ChaveiroDTO getById(int)
+        +ChaveiroDTO create(ChaveiroDTO)
+        +ChaveiroDTO update(int, ChaveiroDTO)
+        +void delete(int)
     }
 
     class AdesivoService {
+        - AdesivoRepository adesivoRepository
+        - AdesivoMapper adesivoMapper
+        +List<AdesivoDTO> getAll()
+        +AdesivoDTO getById(int)
+        +AdesivoDTO create(AdesivoDTO)
+        +AdesivoDTO update(int, AdesivoDTO)
+        +void delete(int)
     }
 
     class UsuarioService {
+        +List<UsuarioDTO> listarUsuarios()
+        +UsuarioDTO buscarPorId(int id)
+        +UsuarioDTO criarUsuario(UsuarioDTO dto)
+        +UsuarioDTO editarUsuario(int id, UsuarioDTO dto)
+        +void deletarUsuario(int id)
+        +boolean validarLogin(String nome, String senha)
+        +boolean sistemaSemUsuarios()
+        +UsuarioDTO criarAdminPadrao()
     }
 
 %%Mappers
 
     class ColecaoMapper {
+        + toDTO(Colecao): ColecaoDTO
+        + toEntity(ColecaoDTO): Colecao
     }
 
     class EstampaMapper{
+        +Estampa toEntity(EstampaDTO): Estampa
+        +EstampaDTO toDTO(Estampa): EstampaDTO
     }
 
     class PecaMapper {
+        +Peca toEntity(PecaDTO): Peca
+        +PecaDTO toDTO(Peca): PecaDTO
     }
 
 
     class ChaveiroMapper {
+        +Chaveiro toEntity(ChaveiroDTO): Chaveiro
+        +ChaveiroDTO toDTO(Chaveiro): ChaveiroDTO
     }
 
     class AdesivoMapper {
+        +Adesivo toEntity(AdesivoDTO): Adesivo
+        +AdesivoDTO toDTO(Adesivo): AdesivoDTO
     }
 
     class UsuarioMapper {
+        +Usuario toEntity(UsuarioDTO dto)
+        +UsuarioDTO toDTO(Usuario entity)
     }
+
+%%DTOs
+
+    class ColecaoDTO {
+        - int colecao_id
+        - String nome
+        - LocalDate dataInicio
+        - LocalDate dataFim
+        + getColecao_Id(): int
+        + setColecao_Id(int): void
+        + getNome(): String
+        + setNome(String): void
+        + getDataInicio(): LocalDate
+        + setDataInicio(LocalDate): void
+        + getDataFim(): LocalDate
+        + setDataFim(LocalDate): void
+    }
+
+    class EstampaDTO {
+        - int estampa_id
+        - String nome
+        - int quantidade
+        - int colecao_id
+        +getEstampa_id(): int
+        +setEstampa_id(int): void
+        +getNome(): String
+        +setNome(String): void
+        +getQuantidade(): int
+        +setQuantidade(int): void
+        +getColecao_id(): int
+        +setColecao_id(int): void
+    }
+
+    class PecaDTO {
+        - int peca_id
+        - String tipo
+        - String tamanho
+        - String cor
+        - int quantidade
+        +getPeca_id(): int
+        +setPeca_id(int): void
+        +getTipo(): String
+        +setTipo(String): void
+        +getTamanho(): String
+        +setTamanho(String): void
+        +getCor(): String
+        +setCor(String): void
+        +getQuantidade(): int
+        +setQuantidade(int): void
+    }
+
+    class ChaveiroDTO {
+        - int chaveiro_id
+        - String chaveiro_modelo
+        - int colecao_id
+        +getChaveiro_id(): int
+        +setChaveiro_id(int): void
+        +getChaveiro_modelo(): String
+        +setChaveiro_modelo(String): void
+        +getColecao_id(): int
+        +setColecao_id(int): void
+    }
+
+    class AdesivoDTO {
+        - int adesivo_id
+        - String adesivo_modelo
+        - boolean cromatico
+        +getAdesivo_id(): int
+        +setAdesivo_id(int): void
+        +getAdesivo_modelo(): String
+        +setAdesivo_modelo(String): void
+        +isCromatico(): boolean
+        +setCromatico(boolean): void
+    }
+
+    class UsuarioDTO {
+        - int usuario_id
+        - String nome
+        - String tipo
+        +getUsuario_id(): int
+        +setUsuario_id(int): void
+        +getNome(): String
+        +setNome(String): void
+        +getTipo(): String
+        +setTipo(String): void
+    }
+
 
 %%Controllers
 
     class ColecaoController {
+        - ColecaoService service
+        + getAll(): List<ColecaoDTO>
+        + post(ColecaoDTO): ColecaoDTO
+        + put(ColecaoDTO): ColecaoDTO
+        + delete(int): void
     }
 
     class EstampaController {
+        - EstampaService estampaService
+        +List<EstampaDTO> getAll()
+        +EstampaDTO getById(int)
+        +EstampaDTO create(EstampaDTO)
+        +EstampaDTO update(int, EstampaDTO)
+        +void delete(int)
     }
 
     class PecaController {
+        - PecaService pecaService
+        +List<PecaDTO> getAll()
+        +PecaDTO getById(int)
+        +PecaDTO create(PecaDTO)
+        +PecaDTO update(int, PecaDTO)
+        +void delete(int)
     }
 
     class ChaveiroController {
+        - ChaveiroService chaveiroService
+        +List<ChaveiroDTO> getAll()
+        +ChaveiroDTO getById(int)
+        +ChaveiroDTO create(ChaveiroDTO)
+        +ChaveiroDTO update(int, ChaveiroDTO)
+        +void delete(int)
     }
 
     class AdesivoController {
+        - AdesivoService adesivoService
+        +List<AdesivoDTO> getAll()
+        +AdesivoDTO getById(int)
+        +AdesivoDTO create(AdesivoDTO)
+        +AdesivoDTO update(int, AdesivoDTO)
+        +void delete(int)
     }
 
     class UsuarioController {
+        +List<UsuarioDTO> getAll()
+        +UsuarioDTO getById(int id)
+        +UsuarioDTO post(UsuarioDTO dto)
+        +UsuarioDTO put(int id, UsuarioDTO dto)
+        +void delete(int id)
+        +boolean login(String nome, String senha)
+        +void inicializarSistema()
     }
 
 %%Relacoes
 
-AdesivoController -->AdesivoService : chama
-AdesivoService -->AdesivoRepository : persiste/busca
-AdesivoService -->AdesivoMapper : converteDTO<->Model
-AdesivoRepository -->Adesivo: trabalha com a entidade
-AdesivoMapper --> Adesivo
-AdesivoMapper --> AdesivoDTO
+    AdesivoController -->AdesivoService : chama
+    AdesivoService -->AdesivoRepository : persiste/busca
+    AdesivoService -->AdesivoMapper : converteDTO<->Model
+    AdesivoRepository -->Adesivo: trabalha com a entidade
+    AdesivoMapper --> Adesivo
+    AdesivoMapper --> AdesivoDTO
 
-ColecaoController -->ColecaoService : chama
-ColecaoService -->ColecaoRepository : persiste/busca
-ColecaoService -->ColecaoMapper : converteDTO<->Model
-ColecaoRepository -->Colecao: trabalha com a entidade
-ColecaoMapper --> Colecao
-ColecaoMapper --> ColecaoDTO
+    ColecaoController -->ColecaoService : chama
+    ColecaoService -->ColecaoRepository : persiste/busca
+    ColecaoService -->ColecaoMapper : converteDTO<->Model
+    ColecaoRepository -->Colecao: trabalha com a entidade
+    ColecaoMapper --> Colecao
+    ColecaoMapper --> ColecaoDTO
 
-EstampaController -->EstampaService : chama
-EstampaService -->EstampaRepository : persiste/busca
-EstampaService -->EstampaMapper : converteDTO<->Model
-EstampaRepository -->Estampa: trabalha com a entidade
-EstampaMapper --> Estampa
-EstampaMapper --> EstampaDTO
+    EstampaController -->EstampaService : chama
+    EstampaService -->EstampaRepository : persiste/busca
+    EstampaService -->EstampaMapper : converteDTO<->Model
+    EstampaRepository -->Estampa: trabalha com a entidade
+    EstampaMapper --> Estampa
+    EstampaMapper --> EstampaDTO
 
-PecaController -->PecaService : chama
-PecaService -->PecaRepository : persiste/busca
-PecaService -->PecaMapper : converteDTO<->Model
-PecaRepository -->Peca: trabalha com a entidade
-PecaMapper -->Peca
-PecaMapper --> PecaDTO
+    PecaController -->PecaService : chama
+    PecaService -->PecaRepository : persiste/busca
+    PecaService -->PecaMapper : converteDTO<->Model
+    PecaRepository -->Peca: trabalha com a entidade
+    PecaMapper -->Peca
+    PecaMapper --> PecaDTO
 
-ChaveiroController -->ChaveiroService : chama
-ChaveiroService -->ChaveiroRepository : persiste/busca
-ChaveiroService -->ChaveiroMapper : converteDTO<->Model
-ChaveiroRepository -->Chaveiro: trabalha com a entidade
-ChaveiroMapper --> Chaveiro
-ChaveiroMapper --> ChaveiroDTO
+    ChaveiroController -->ChaveiroService : chama
+    ChaveiroService -->ChaveiroRepository : persiste/busca
+    ChaveiroService -->ChaveiroMapper : converteDTO<->Model
+    ChaveiroRepository -->Chaveiro: trabalha com a entidade
+    ChaveiroMapper --> Chaveiro
+    ChaveiroMapper --> ChaveiroDTO
 
-UsuarioController -->UsuarioService : chama
-UsuarioService -->UsuarioRepository : persiste/busca
-UsuarioService -->UsuarioMapper : converteDTO<->Model
-UsuarioRepository -->Usuario: trabalha com a entidade
-UsuarioMapper --> Usuario
-UsuarioMapper --> UsuarioDTO
-
-
-
+    UsuarioController -->UsuarioService : chama
+    UsuarioService -->UsuarioRepository : persiste/busca
+    UsuarioService -->UsuarioMapper : converteDTO<->Model
+    UsuarioRepository -->Usuario: trabalha com a entidade
+    UsuarioMapper --> Usuario
+    UsuarioMapper --> UsuarioDTO
