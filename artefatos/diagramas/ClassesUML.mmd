@@ -81,6 +81,7 @@ classDiagram
         - String nome
         - String senha
         - TipoUsuario tipo
+        - List<HistoricoAlteracao> historicos
         +Usuario()
         +Usuario(String nome, String senha, TipoUsuario tipo)
         +getUsuario_id(): int
@@ -91,7 +92,10 @@ classDiagram
         +setSenha(String): void
         +getTipo(): TipoUsuario
         +setTipo(TipoUsuario): void
+        +getHistoricos(): List<HistoricoAlteracao>
+        +setHistoricos(List<HistoricoAlteracao>): void
     }
+
 
     class TipoUsuario {
         <<enumeration>>
@@ -99,9 +103,37 @@ classDiagram
         FUNCIONARIO
     }
 
+    class HistoricoAlteracao {
+        - int id
+        - String entidade
+        - int entidadeId
+        - String campoAlterado
+        - String valorAntigo
+        - String valorNovo
+        - LocalDateTime dataHora
+        - Usuario usuario
+        + getId(): int
+        + setId(int): void
+        + getEntidade(): String
+        + setEntidade(String): void
+        + getEntidadeId(): int
+        + setEntidadeId(int): void
+        + getCampoAlterado(): String
+        + setCampoAlterado(String): void
+        + getValorAntigo(): String
+        + setValorAntigo(String): void
+        + getValorNovo(): String
+        + setValorNovo(String): void
+        + getDataHora(): LocalDateTime
+        + setDataHora(LocalDateTime): void
+        + getUsuario(): Usuario
+        + setUsuario(Usuario): void
+    }
+
     Colecao "1" --> "n" Estampa : contem
     Colecao "1" --> "n" Chaveiro : contem
     Usuario --> TipoUsuario : tipo
+    Usuario "1" --> "n" HistoricoAlteracao : realiza
 
 %%Repositorys
 

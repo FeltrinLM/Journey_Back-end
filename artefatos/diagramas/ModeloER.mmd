@@ -1,6 +1,7 @@
 erDiagram
     COLECAO ||--o{ ESTAMPA : contem
     COLECAO ||--o{ CHAVEIRO : contem
+    USUARIO ||--o{ HISTORICO_ALTERACAO : registra
 
     USUARIO {
         int usuario_id PK
@@ -31,15 +32,25 @@ erDiagram
         int quantidade
     }
 
-
-    ADESIVO{
+    ADESIVO {
         int adesivo_id PK
         string adesivo_modelo
         boolean cromatico
     }
 
-    CHAVEIRO{
+    CHAVEIRO {
         int chaveiro_id PK
         string chaveiro_modelo
         int colecao_id FK
+    }
+
+    HISTORICO_ALTERACAO {
+        int id PK
+        string entidade         "Nome da entidade alterada (ex: 'Peca')"
+        int entidade_id         "ID da entidade alterada"
+        string campo_alterado   "Campo alterado (ex: 'quantidade')"
+        string valor_antigo
+        string valor_novo
+        datetime data_hora
+        int usuario_id FK
     }
