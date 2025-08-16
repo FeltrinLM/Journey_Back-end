@@ -7,36 +7,34 @@ public class Adesivo {
 
     @Id     //define a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto-incremento (estratégia do banco).
-    private int adesivo_id;
+    private int adesivoId;
 
-    private String adesivo_modelo;
+    private String adesivoModelo;
     private boolean cromatico;
 
     // Construtor vazio (obrigatório para JPA).
     public Adesivo() {}
 
     // Construtor com parâmetros.
-    public Adesivo(String adesivo_modelo, boolean cromatico) {
-        this.adesivo_modelo = adesivo_modelo;
+    public Adesivo(String adesivoModelo, boolean cromatico) {
+        this.adesivoModelo = adesivoModelo;
         this.cromatico = cromatico;
     }
 
     // Getters e Setters
 
-    public int getAdesivo_id() {
-        return adesivo_id;
+    public int getAdesivoId() {return adesivoId;}
+
+    public void setAdesivoId(int adesivoId) {
+        this.adesivoId = adesivoId;
     }
 
-    public void setAdesivo_id(int adesivo_id) {
-        this.adesivo_id = adesivo_id;
+    public String getAdesivoModelo() {
+        return adesivoModelo;
     }
 
-    public String getAdesivo_modelo() {
-        return adesivo_modelo;
-    }
-
-    public void setAdesivo_modelo(String adesivo_modelo) {
-        this.adesivo_modelo = adesivo_modelo;
+    public void setAdesivoModelo(String adesivoModelo) {
+        this.adesivoModelo = adesivoModelo;
     }
 
     public boolean isCromatico() {

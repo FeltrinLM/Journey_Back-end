@@ -10,7 +10,7 @@ public class PecaMapper {
         if (peca == null) return null;
 
         PecaDTO dto = new PecaDTO();
-        dto.setPeca_id(peca.getPeca_id());
+        dto.setPecaId(peca.getPecaId());
         dto.setTipo(peca.getTipo());
         dto.setTamanho(peca.getTamanho());
         dto.setCor(peca.getCor());
@@ -24,7 +24,7 @@ public class PecaMapper {
         if (dto == null) return null;
 
         Peca peca = new Peca();
-        peca.setPeca_id(dto.getPeca_id());
+        peca.setPecaId(dto.getPecaId());
         peca.setTipo(dto.getTipo());
         peca.setTamanho(dto.getTamanho());
         peca.setCor(dto.getCor());

@@ -37,7 +37,7 @@ public class EstampaService {
 
     // Criar nova estampa
     public EstampaDTO criarEstampa(EstampaDTO dto) {
-        Colecao colecao = colecaoRepository.findById(dto.getColecao_id())
+        Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
                 .orElseThrow(() -> new RuntimeException("Coleção não encontrada para a estampa."));
 
         Estampa nova = EstampaMapper.toModel(dto, colecao);
@@ -50,7 +50,7 @@ public class EstampaService {
         Estampa existente = estampaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Estampa não encontrada."));
 
-        Colecao colecao = colecaoRepository.findById(dto.getColecao_id())
+        Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
                 .orElseThrow(() -> new RuntimeException("Coleção não encontrada."));
 
         existente.setNome(dto.getNome());

@@ -187,6 +187,18 @@ classDiagram
         +List<Usuario> findAll()
     }
 
+    class HistoricoAlteracaoRepository {
+        <<interface>>
+        +List<HistoricoAlteracao> findByEntidade(String entidade)
+        +List<HistoricoAlteracao> findByEntidadeAndEntidadeId(String entidade, int entidadeId)
+        +List<HistoricoAlteracao> findByUsuarioUsuarioId(int usuarioId)
+        +List<HistoricoAlteracao> findAllByOrderByDataHoraDesc()
+        +<T extends HistoricoAlteracao> save(T entity)
+        +Optional<HistoricoAlteracao> findById(int id)
+        +List<HistoricoAlteracao> findAll()
+        +void deleteById(int id)
+    }
+
 %%Services
 
     class ColecaoService {
@@ -253,33 +265,38 @@ classDiagram
 
     class ColecaoMapper {
         + toDTO(Colecao): ColecaoDTO
-        + toEntity(ColecaoDTO): Colecao
+        + toModel(ColecaoDTO): Colecao
     }
 
     class EstampaMapper{
-        +Estampa toEntity(EstampaDTO): Estampa
+        +Estampa toModel(EstampaDTO): Estampa
         +EstampaDTO toDTO(Estampa): EstampaDTO
     }
 
     class PecaMapper {
-        +Peca toEntity(PecaDTO): Peca
+        +Peca toModel(PecaDTO): Peca
         +PecaDTO toDTO(Peca): PecaDTO
     }
 
 
     class ChaveiroMapper {
-        +Chaveiro toEntity(ChaveiroDTO): Chaveiro
+        +Chaveiro toModel(ChaveiroDTO): Chaveiro
         +ChaveiroDTO toDTO(Chaveiro): ChaveiroDTO
     }
 
     class AdesivoMapper {
-        +Adesivo toEntity(AdesivoDTO): Adesivo
+        +Adesivo toModel(AdesivoDTO): Adesivo
         +AdesivoDTO toDTO(Adesivo): AdesivoDTO
     }
 
     class UsuarioMapper {
-        +Usuario toEntity(UsuarioDTO dto)
+        +Usuario toModel(UsuarioDTO dto)
         +UsuarioDTO toDTO(Usuario entity)
+    }
+
+    class HistoricoAlteracaoMapper {
+        +HistoricoAlteracao toModel(HistoricoAlteracaoDTO dto, Usuario usuario)
+        +HistoricoAlteracaoDTO toDTO(HistoricoAlteracao entity)
     }
 
 %%DTOs
@@ -367,6 +384,34 @@ classDiagram
         +getTipo(): String
         +setTipo(String): void
     }
+
+    class HistoricoAlteracaoDTO {
+        - long id
+        - String entidade
+        - int entidadeId
+        - String campoAlterado
+        - String valorAntigo
+        - String valorNovo
+        - LocalDateTime dataHora
+        - int usuarioId
+        + getId(): long
+        + setId(long): void
+        + getEntidade(): String
+        + setEntidade(String): void
+        + getEntidadeId(): int
+        + setEntidadeId(int): void
+        + getCampoAlterado(): String
+        + setCampoAlterado(String): void
+        + getValorAntigo(): String
+        + setValorAntigo(String): void
+        + getValorNovo(): String
+        + setValorNovo(String): void
+        + getDataHora(): LocalDateTime
+        + setDataHora(LocalDateTime): void
+        + getUsuarioId(): int
+        + setUsuarioId(int): void
+    }
+
 
 
 %%Controllers
@@ -468,3 +513,10 @@ classDiagram
     UsuarioRepository -->Usuario: trabalha com a entidade
     UsuarioMapper --> Usuario
     UsuarioMapper --> UsuarioDTO
+
+    HistoricoAlteracaoController -->HistoricoAlteracaoService : chama
+    HistoricoAlteracaoService -->HistoricoAlteracaoRepository : persiste/busca
+    HistoricoAlteracaoService -->HistoricoAlteracaoMapper : converteDTO<->Model
+    HistoricoAlteracaoRepository -->HistoricoAlteracao: trabalha com a entidade
+    HistoricoAlteracaoMapper --> HistoricoAlteracao
+    HistoricoAlteracaoMapper --> HistoricoAlteracaoDTO

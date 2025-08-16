@@ -7,7 +7,7 @@ public class Peca {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int peca_id;
+    private int pecaId;
 
     private String tipo;
     private String tamanho;
@@ -29,12 +29,12 @@ public class Peca {
 
     // Getters e Setters
 
-    public int getPeca_id() {
-        return peca_id;
+    public int getPecaId() {
+        return pecaId;
     }
 
-    public void setPeca_id(int peca_id) {
-        this.peca_id = peca_id;
+    public void setPecaId(int pecaId) {
+        this.pecaId = pecaId;
     }
 
     public String getTipo() {
@@ -45,9 +45,7 @@ public class Peca {
         this.tipo = tipo;
     }
 
-    public String getTamanho() {
-        return tamanho;
-    }
+    public String getTamanho() {return tamanho; }
 
     public void setTamanho(String tamanho) {
         this.tamanho = tamanho;

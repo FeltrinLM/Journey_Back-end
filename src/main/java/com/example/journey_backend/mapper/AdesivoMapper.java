@@ -10,8 +10,8 @@ public class AdesivoMapper {
         if (adesivo == null) return null;
 
         AdesivoDTO dto = new AdesivoDTO();
-        dto.setAdesivo_id(adesivo.getAdesivo_id());
-        dto.setAdesivo_modelo(adesivo.getAdesivo_modelo());
+        dto.setAdesivoId(adesivo.getAdesivoId());
+        dto.setAdesivoModelo(adesivo.getAdesivoModelo());
         dto.setCromatico(adesivo.isCromatico());
         return dto;
     }
@@ -21,8 +21,8 @@ public class AdesivoMapper {
         if (dto == null) return null;
 
         Adesivo adesivo = new Adesivo();
-        adesivo.setAdesivo_id(dto.getAdesivo_id());
-        adesivo.setAdesivo_modelo(dto.getAdesivo_modelo());
+        adesivo.setAdesivoId(dto.getAdesivoId());
+        adesivo.setAdesivoModelo(dto.getAdesivoModelo());
         adesivo.setCromatico(dto.isCromatico());
         return adesivo;
     }

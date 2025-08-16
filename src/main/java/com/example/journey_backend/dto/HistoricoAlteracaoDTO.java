@@ -1,36 +1,22 @@
-package com.example.journey_backend.model;
+package com.example.journey_backend.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "historicoAlteracao")
-public class HistoricoAlteracao {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String entidade;      // Ex: "Peca", "Colecao"
-    private int entidadeId;       // ID da entidade alterada
-
-    private String campoAlterado; // Ex: "quantidade", "nome"
+public class HistoricoAlteracaoDTO {
+    private long id;
+    private String entidade;
+    private int entidadeId;
+    private String campoAlterado;
     private String valorAntigo;
     private String valorNovo;
-
     private LocalDateTime dataHora;
+    private int usuarioId;
 
-    @ManyToOne
-    @JoinColumn(name = "usuarioId")
-    private Usuario usuario; // usuário que fez a alteração
-
-    // ================== GETTERS E SETTERS ==================
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -82,11 +68,11 @@ public class HistoricoAlteracao {
         this.dataHora = dataHora;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public int getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
     }
 }

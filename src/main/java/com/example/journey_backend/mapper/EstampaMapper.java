@@ -11,10 +11,10 @@ public class EstampaMapper {
         if (estampa == null) return null;
 
         EstampaDTO dto = new EstampaDTO();
-        dto.setEstampa_id(estampa.getEstampa_id());
+        dto.setEstampaId(estampa.getEstampaId());
         dto.setNome(estampa.getNome());
         dto.setQuantidade(estampa.getQuantidade());
-        dto.setColecao_id(estampa.getColecao() != null ? estampa.getColecao().getColecao_id() : 0);
+        dto.setColecaoId(estampa.getColecao() != null ? estampa.getColecao().getColecaoId() : 0);
         return dto;
     }
 
@@ -23,7 +23,7 @@ public class EstampaMapper {
         if (dto == null) return null;
 
         Estampa estampa = new Estampa();
-        estampa.setEstampa_id(dto.getEstampa_id());
+        estampa.setEstampaId(dto.getEstampaId());
         estampa.setNome(dto.getNome());
         estampa.setQuantidade(dto.getQuantidade());
         estampa.setColecao(colecao); // precisa ser injetado (via serviço)

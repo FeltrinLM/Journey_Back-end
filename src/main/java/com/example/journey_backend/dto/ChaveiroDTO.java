@@ -2,43 +2,41 @@ package com.example.journey_backend.dto;
 
 public class ChaveiroDTO {
 
-    private int chaveiro_id;
-    private String chaveiro_modelo;
-    private int colecao_id;
+    private int chaveiroId;
+    private String chaveiroModelo;
+    private int colecaoId;
 
     // Construtor vazio
     public ChaveiroDTO() {}
 
     // Construtor com parâmetros
-    public ChaveiroDTO(int chaveiro_id, String chaveiro_modelo, int colecao_id) {
-        this.chaveiro_id = chaveiro_id;
-        this.chaveiro_modelo = chaveiro_modelo;
-        this.colecao_id = colecao_id;
+    public ChaveiroDTO(int chaveiroId, String chaveiroModelo, int colecaoId) {
+        this.chaveiroId = chaveiroId;
+        this.chaveiroModelo = chaveiroModelo;
+        this.colecaoId = colecaoId;
     }
 
     // Getters e Setters
 
-    public int getChaveiro_id() {
-        return chaveiro_id;
+    public int getChaveiroId() {return chaveiroId; }
+
+    public void setChaveiroId(int chaveiroId) {
+        this.chaveiroId = chaveiroId;
     }
 
-    public void setChaveiro_id(int chaveiro_id) {
-        this.chaveiro_id = chaveiro_id;
+    public String getChaveiroModelo() {
+        return chaveiroModelo;
     }
 
-    public String getChaveiro_modelo() {
-        return chaveiro_modelo;
+    public void setChaveiroModelo(String chaveiroModelo) {
+        this.chaveiroModelo = chaveiroModelo;
     }
 
-    public void setChaveiro_modelo(String chaveiro_modelo) {
-        this.chaveiro_modelo = chaveiro_modelo;
+    public int getColecaoId() {
+        return colecaoId;
     }
 
-    public int getColecao_id() {
-        return colecao_id;
-    }
-
-    public void setColecao_id(int colecao_id) {
-        this.colecao_id = colecao_id;
+    public void setColecaoId(int colecaoId) {
+        this.colecaoId = colecaoId;
     }
 }

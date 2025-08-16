@@ -37,7 +37,7 @@ public class ChaveiroService {
 
     // Criar novo chaveiro
     public ChaveiroDTO criarChaveiro(ChaveiroDTO dto) {
-        Colecao colecao = colecaoRepository.findById(dto.getColecao_id())
+        Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
                 .orElseThrow(() -> new RuntimeException("Coleção não encontrada"));
 
         Chaveiro chaveiro = ChaveiroMapper.toModel(dto, colecao);
@@ -50,10 +50,10 @@ public class ChaveiroService {
         Chaveiro existente = chaveiroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chaveiro não encontrado"));
 
-        Colecao colecao = colecaoRepository.findById(dto.getColecao_id())
+        Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
                 .orElseThrow(() -> new RuntimeException("Coleção não encontrada"));
 
-        existente.setChaveiro_modelo(dto.getChaveiro_modelo());
+        existente.setChaveiroModelo(dto.getChaveiroModelo());
         existente.setColecao(colecao);
 
         Chaveiro atualizado = chaveiroRepository.save(existente);

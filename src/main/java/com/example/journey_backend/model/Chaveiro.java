@@ -7,39 +7,39 @@ public class Chaveiro {
 
     @Id     //define a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incremento (estratégia do banco).
-    private int chaveiro_id;
+    private int chaveiroId;
 
-    private String chaveiro_modelo;
+    private String chaveiroModelo;
 
     @ManyToOne                        //define que vários chaveiros pertencem a uma coleção.
-    @JoinColumn(name = "colecao_id") //indica a foreign key.
+    @JoinColumn(name = "colecaoId") //indica a foreign key.
     private Colecao colecao;
 
     // Construtor vazio (obrigatório para JPA).
     public Chaveiro() {}
 
     // Construtor com parâmetros.
-    public Chaveiro(String chaveiro_modelo, Colecao colecao) {
-        this.chaveiro_modelo = chaveiro_modelo;
+    public Chaveiro(String chaveiroModelo, Colecao colecao) {
+        this.chaveiroModelo = chaveiroModelo;
         this.colecao = colecao;
     }
 
     // Getters e Setters
 
-    public int getChaveiro_id() {
-        return chaveiro_id;
+    public int getChaveiroId() {
+        return chaveiroId;
     }
 
-    public void setChaveiro_id(int chaveiro_id) {
-        this.chaveiro_id = chaveiro_id;
+    public void setChaveiroId(int chaveiroId) {
+        this.chaveiroId = chaveiroId;
     }
 
-    public String getChaveiro_modelo() {
-        return chaveiro_modelo;
+    public String getChaveiroModelo() {
+        return chaveiroModelo;
     }
 
-    public void setChaveiro_modelo(String chaveiro_modelo) {
-        this.chaveiro_modelo = chaveiro_modelo;
+    public void setChaveiroModelo(String chaveiroModelo) {
+        this.chaveiroModelo = chaveiroModelo;
     }
 
     public Colecao getColecao() {

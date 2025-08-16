@@ -2,7 +2,7 @@ package com.example.journey_backend.dto;
 
 public class PecaDTO {
 
-    private int peca_id;
+    private int pecaId;
     private String tipo;
     private String tamanho;
     private String cor;
@@ -12,8 +12,8 @@ public class PecaDTO {
     public PecaDTO() {}
 
     // Construtor com parâmetros
-    public PecaDTO(int peca_id, String tipo, String tamanho, String cor, int quantidade) {
-        this.peca_id = peca_id;
+    public PecaDTO(int pecaId, String tipo, String tamanho, String cor, int quantidade) {
+        this.pecaId = pecaId;
         this.tipo = tipo;
         this.tamanho = tamanho;
         this.cor = cor;
@@ -22,12 +22,12 @@ public class PecaDTO {
 
     // Getters e Setters
 
-    public int getPeca_id() {
-        return peca_id;
+    public int getPecaId() {
+        return pecaId;
     }
 
-    public void setPeca_id(int peca_id) {
-        this.peca_id = peca_id;
+    public void setPecaId(int pecaId) {
+        this.pecaId = pecaId;
     }
 
     public String getTipo() {

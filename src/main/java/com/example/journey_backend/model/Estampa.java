@@ -7,13 +7,13 @@ public class Estampa {
 
     @Id     //define a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY)     //auto-incremento (estratégia do banco).
-    private int estampa_id;
+    private int estampaId;
 
     private String nome;
     private int quantidade;
 
     @ManyToOne                        //define que várias estampas pertencem a uma coleção.
-    @JoinColumn(name = "colecao_id") //indica a foreign key.
+    @JoinColumn(name = "colecaoId") //indica a foreign key.
     private Colecao colecao;
 
 
@@ -30,12 +30,12 @@ public class Estampa {
 
     // Getters e Setters
 
-    public int getEstampa_id() {
-        return estampa_id;
+    public int getEstampaId() {
+        return estampaId;
     }
 
-    public void setEstampa_id(int estampa_id) {
-        this.estampa_id = estampa_id;
+    public void setEstampaId(int estampaId) {
+        this.estampaId = estampaId;
     }
 
     public String getNome() {

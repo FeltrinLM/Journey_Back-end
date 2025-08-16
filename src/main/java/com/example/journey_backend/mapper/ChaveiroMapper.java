@@ -11,10 +11,10 @@ public class ChaveiroMapper {
         if (chaveiro == null) return null;
 
         ChaveiroDTO dto = new ChaveiroDTO();
-        dto.setChaveiro_id(chaveiro.getChaveiro_id());
-        dto.setChaveiro_modelo(chaveiro.getChaveiro_modelo());
-        dto.setColecao_id(
-                chaveiro.getColecao() != null ? chaveiro.getColecao().getColecao_id() : 0
+        dto.setChaveiroId(chaveiro.getChaveiroId());
+        dto.setChaveiroModelo(chaveiro.getChaveiroModelo());
+        dto.setColecaoId(
+                chaveiro.getColecao() != null ? chaveiro.getColecao().getColecaoId() : 0
         );
 
         return dto;
@@ -25,8 +25,8 @@ public class ChaveiroMapper {
         if (dto == null) return null;
 
         Chaveiro chaveiro = new Chaveiro();
-        chaveiro.setChaveiro_id(dto.getChaveiro_id());
-        chaveiro.setChaveiro_modelo(dto.getChaveiro_modelo());
+        chaveiro.setChaveiroId(dto.getChaveiroId());
+        chaveiro.setChaveiroModelo(dto.getChaveiroModelo());
         chaveiro.setColecao(colecao); // injetamos a Colecao já buscada no service
 
         return chaveiro;

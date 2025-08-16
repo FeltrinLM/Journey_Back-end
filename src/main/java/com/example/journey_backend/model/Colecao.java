@@ -9,7 +9,7 @@ public class Colecao {
 
     @Id     //define a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incremento (estratégia do banco).
-    private int colecao_id;
+    private int colecaoId;
 
     private String nome;
     private LocalDate dataInicio;
@@ -23,7 +23,6 @@ public class Colecao {
     @OneToMany(mappedBy = "colecao", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chaveiro> chaveiros;
 
-
     // Construtor vazio (obrigatório para JPA).
     public Colecao() {}
 
@@ -36,13 +35,12 @@ public class Colecao {
 
     // Getters e Setters
 
-
-    public int getColecao_id() {
-        return colecao_id;
+    public int getColecaoId() {
+        return colecaoId;
     }
 
-    public void setColecao_id(int colecao_id) {
-        this.colecao_id = colecao_id;
+    public void setColecaoId(int colecaoId) {
+        this.colecaoId = colecaoId;
     }
 
     public String getNome() {

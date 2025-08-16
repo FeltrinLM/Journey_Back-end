@@ -2,30 +2,30 @@ package com.example.journey_backend.dto;
 
 public class EstampaDTO {
 
-    private int estampa_id;
+    private int estampaId;
     private String nome;
     private int quantidade;
-    private int colecao_id;
+    private int colecaoId;
 
     // Construtor vazio
     public EstampaDTO() {}
 
     // Construtor com parâmetros
-    public EstampaDTO(int estampa_id, String nome, int quantidade, int colecao_id) {
-        this.estampa_id = estampa_id;
+    public EstampaDTO(int estampaId, String nome, int quantidade, int colecaoId) {
+        this.estampaId = estampaId;
         this.nome = nome;
         this.quantidade = quantidade;
-        this.colecao_id = colecao_id;
+        this.colecaoId = colecaoId;
     }
 
     // Getters e Setters
 
-    public int getEstampa_id() {
-        return estampa_id;
+    public int getEstampaId() {
+        return estampaId;
     }
 
-    public void setEstampa_id(int estampa_id) {
-        this.estampa_id = estampa_id;
+    public void setEstampaId(int estampaId) {
+        this.estampaId = estampaId;
     }
 
     public String getNome() {
@@ -44,11 +44,12 @@ public class EstampaDTO {
         this.quantidade = quantidade;
     }
 
-    public int getColecao_id() {
-        return colecao_id;
+    public int getColecaoId() {
+        return colecaoId;
     }
 
-    public void setColecao_id(int colecao_id) {
-        this.colecao_id = colecao_id;
+    public void setColecaoId(int colecaoId) {
+        this.colecaoId = colecaoId;
     }
+
 }

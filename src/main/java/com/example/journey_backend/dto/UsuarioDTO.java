@@ -2,24 +2,24 @@ package com.example.journey_backend.dto;
 
 public class UsuarioDTO {
 
-    private int usuario_id;
+    private int usuarioId;
     private String nome;
     private String tipo;
 
     public UsuarioDTO() {}
 
-    public UsuarioDTO(int usuario_id, String nome, String tipo) {
-        this.usuario_id = usuario_id;
+    public UsuarioDTO(int usuarioId, String nome, String tipo) {
+        this.usuarioId = usuarioId;
         this.nome = nome;
         this.tipo = tipo;
     }
 
-    public int getUsuario_id() {
-        return usuario_id;
+    public int getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsuario_id(int usuario_id) {
-        this.usuario_id = usuario_id;
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String getNome() {

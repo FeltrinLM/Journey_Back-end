@@ -13,7 +13,7 @@ public class Usuario {
 
     @Id     // Define a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremento (estratégia do banco).
-    private int usuario_id;
+    private int usuarioId;
 
     private String nome;  // Nome do usuário.
     private String senha; // Senha do usuário (armazenar sempre em formato hash).
@@ -34,12 +34,12 @@ public class Usuario {
 
     // Getters e Setters.
 
-    public int getUsuario_id() {
-        return usuario_id;
+    public int getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setUsuario_id(int usuario_id) {
-        this.usuario_id = usuario_id;
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String getNome() {

@@ -42,7 +42,7 @@ public class AdesivoService {
         Adesivo adesivoExistente = adesivoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Adesivo não encontrado"));
 
-        adesivoExistente.setAdesivo_modelo(dto.getAdesivo_modelo());
+        adesivoExistente.setAdesivoModelo(dto.getAdesivoModelo());
         adesivoExistente.setCromatico(dto.isCromatico());
 
         Adesivo atualizado = adesivoRepository.save(adesivoExistente);

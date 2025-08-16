@@ -10,7 +10,7 @@ public class ColecaoMapper {
         if (colecao == null) return null;
 
         ColecaoDTO dto = new ColecaoDTO();
-        dto.setColecao_id(colecao.getColecao_id());
+        dto.setColecaoId(colecao.getColecaoId());
         dto.setNome(colecao.getNome());
         dto.setDataInicio(colecao.getDataInicio());
         dto.setDataFim(colecao.getDataFim());
@@ -23,7 +23,7 @@ public class ColecaoMapper {
         if (dto == null) return null;
 
         Colecao colecao = new Colecao();
-        colecao.setColecao_id(dto.getColecao_id());
+        colecao.setColecaoId(dto.getColecaoId());
         colecao.setNome(dto.getNome());
         colecao.setDataInicio(dto.getDataInicio());
         colecao.setDataFim(dto.getDataFim());

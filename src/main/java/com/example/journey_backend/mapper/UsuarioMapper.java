@@ -11,7 +11,7 @@ public class UsuarioMapper {
         if (usuario == null) return null;
 
         UsuarioDTO dto = new UsuarioDTO();
-        dto.setUsuario_id(usuario.getUsuario_id());
+        dto.setUsuarioId(usuario.getUsuarioId());
         dto.setNome(usuario.getNome());
         dto.setTipo(usuario.getTipo().name()); // converte enum para string
         return dto;
@@ -22,7 +22,7 @@ public class UsuarioMapper {
         if (dto == null) return null;
 
         Usuario usuario = new Usuario();
-        usuario.setUsuario_id(dto.getUsuario_id());
+        usuario.setUsuarioId(dto.getUsuarioId());
         usuario.setNome(dto.getNome());
         usuario.setTipo(TipoUsuario.valueOf(dto.getTipo())); // converte string para enum
         return usuario;
