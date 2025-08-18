@@ -70,17 +70,48 @@ src/
                 └── journey_backend/
                     ├── controller/
                     │   └── PecaController.java
+                    │   └── AdesivoController.java
+                    │   └── ColecaoController.java
+                    │   └── ChaveiroController.java
+                    │   └── UsuarioController.java
+                    │   └── HistoricoAlteracaoController.java
                     ├── service/
                     │   └── PecaService.java
+                    │   └── AdesivoService.java
+                    │   └── ColecaoService.java
+                    │   └── ChaveiroService.java
+                    │   └── UsuarioService.java
+                    │   └── HistoricoAlteracaoService.java
                     ├── repository/
                     │   └── PecaRepository.java
+                    │   └── AdesivoRepository.java
+                    │   └── ColecaoRepository.java
+                    │   └── ChaveiroRepository.java
+                    │   └── UsuarioRepository.java
+                    │   └── HistoricoAlteracaoRepository.java
                     ├── model/
                     │   └── Peca.java
+                    │   └── Adesivo.java
+                    │   └── Colecao.java
+                    │   └── Chaveiro.java
+                    │   └── Usuario.java
+                    │   └── HistoricoAlteracao.java
                     ├── dto/
                     │   └── PecaDTO.java
+                    │   └── AdesivoDTO.java
+                    │   └── ColecaoDTO.java
+                    │   └── ChaveiroDTO.java
+                    │   └── UsuarioDTO.java
+                    │   └── HistoriocAlteracaoDTO.java
                     ├── security/
                     │   ├── config/
                     │   │   └── SecurityConfig.java
-                    │   └── jwt/                                          
+                    │   └── jwt/
+                    │        └── JWTAuthenticationEntryPoint.java
+                    │        └── JWTAuthenticationFilter.java
+                    │        └── JWTTokenProvider.java 
+                    │        └── JWTUserDetailsService.java       
+                    │   ├── model/
+                    │        └── CustomUserDetails.java                                       
                     └── JourneyBackEndApplication.java # Classe principal
 ```
