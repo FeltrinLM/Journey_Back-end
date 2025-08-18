@@ -2,12 +2,12 @@ classDiagram
 
 %%Models
     class Colecao {
-        - int colecao_id
+        - int colecaoId
         - String nome
         - LocalDate dataInicio
         - LocalDate dataFim
-        +getColecao_Id(): int
-        +setColecao_Id(int): void
+        +getColecaoId(): int
+        +setColecaoId(int): void
         +getNome(): String
         +setNome(String): void
         +getDataInicio(): LocalDate
@@ -19,12 +19,12 @@ classDiagram
     }
 
     class Estampa {
-        - int estampa_id
+        - int estampaId
         - String nome
         - int quantidade
         - Colecao colecao
-        +getEstampa_id(): int
-        +setEstampa_id(int): void
+        +getEstampaId(): int
+        +setEstampaId(int): void
         +getNome(): String
         +setNome(String): void
         +getQuantidade(): int
@@ -34,13 +34,13 @@ classDiagram
     }
 
     class Peca {
-        - int peca_id
+        - int pecaId
         - String tipo
         - String tamanho
         - String cor
         - int quantidade
-        +getPeca_id(): int
-        +setPeca_id(int): void
+        +getPecaId(): int
+        +setPecaId(int): void
         +getTipo(): String
         +setTipo(String): void
         +getTamanho(): String
@@ -53,39 +53,39 @@ classDiagram
 
 
     class Chaveiro {
-        - int chaveiro_id
-        - String chaveiro_modelo
+        - int chaveiroId
+        - String chaveiroModelo
         - Colecao colecao
-        +getChaveiro_id(): int
-        +setChaveiro_id(int): void
-        +getChaveiro_modelo(): String
-        +setChaveiro_modelo(String): void
+        +getChaveiroId(): int
+        +setChaveiroId(int): void
+        +getChaveiroModelo(): String
+        +setChaveiroModelo(String): void
         +getColecao(): Colecao
         +setColecao(Colecao): void
     }
 
     class Adesivo {
-        - int adesivo_id
-        - String adesivo_modelo
+        - int adesivoId
+        - String adesivoModelo
         - boolean cromatico
-        +getAdesivo_id(): int
-        +setAdesivo_id(int): void
-        +getAdesivo_modelo(): String
-        +setAdesivo_modelo(String): void
+        +getAdesivoId(): int
+        +setAdesivoId(int): void
+        +getAdesivoModelo(): String
+        +setAdesivoModelo(String): void
         +isCromatico(): boolean
         +setCromatico(boolean): void
     }
 
     class Usuario {
-        - int usuario_id
+        - int usuarioId
         - String nome
         - String senha
         - TipoUsuario tipo
         - List<HistoricoAlteracao> historicos
         +Usuario()
         +Usuario(String nome, String senha, TipoUsuario tipo)
-        +getUsuario_id(): int
-        +setUsuario_id(int): void
+        +getUsuarioId(): int
+        +setUsuarioId(int): void
         +getNome(): String
         +setNome(String): void
         +getSenha(): String
@@ -302,12 +302,12 @@ classDiagram
 %%DTOs
 
     class ColecaoDTO {
-        - int colecao_id
+        - int colecaoId
         - String nome
         - LocalDate dataInicio
         - LocalDate dataFim
-        + getColecao_Id(): int
-        + setColecao_Id(int): void
+        + getColecaoId(): int
+        + setColecaoId(int): void
         + getNome(): String
         + setNome(String): void
         + getDataInicio(): LocalDate
@@ -317,28 +317,28 @@ classDiagram
     }
 
     class EstampaDTO {
-        - int estampa_id
+        - int estampaId
         - String nome
         - int quantidade
-        - int colecao_id
-        +getEstampa_id(): int
-        +setEstampa_id(int): void
+        - int colecaoId
+        +getEstampaId(): int
+        +setEstampaId(int): void
         +getNome(): String
         +setNome(String): void
         +getQuantidade(): int
         +setQuantidade(int): void
-        +getColecao_id(): int
-        +setColecao_id(int): void
+        +getColecaoId(): int
+        +setColecaoId(int): void
     }
 
     class PecaDTO {
-        - int peca_id
+        - int pecaId
         - String tipo
         - String tamanho
         - String cor
         - int quantidade
-        +getPeca_id(): int
-        +setPeca_id(int): void
+        +getPecaId(): int
+        +setPecaId(int): void
         +getTipo(): String
         +setTipo(String): void
         +getTamanho(): String
@@ -350,35 +350,35 @@ classDiagram
     }
 
     class ChaveiroDTO {
-        - int chaveiro_id
-        - String chaveiro_modelo
-        - int colecao_id
-        +getChaveiro_id(): int
-        +setChaveiro_id(int): void
-        +getChaveiro_modelo(): String
-        +setChaveiro_modelo(String): void
-        +getColecao_id(): int
-        +setColecao_id(int): void
+        - int chaveiroId
+        - String chaveiroModelo
+        - int colecaoId
+        +getChaveiroId(): int
+        +setChaveiroId(int): void
+        +getChaveiroModelo(): String
+        +setChaveiroModelo(String): void
+        +getColecaoId(): int
+        +setColecaoId(int): void
     }
 
     class AdesivoDTO {
-        - int adesivo_id
-        - String adesivo_modelo
+        - int adesivoId
+        - String adesivoModelo
         - boolean cromatico
-        +getAdesivo_id(): int
-        +setAdesivo_id(int): void
-        +getAdesivo_modelo(): String
-        +setAdesivo_modelo(String): void
+        +getAdesivoId(): int
+        +setAdesivoId(int): void
+        +getAdesivoModelo(): String
+        +setAdesivoModelo(String): void
         +isCromatico(): boolean
         +setCromatico(boolean): void
     }
 
     class UsuarioDTO {
-        - int usuario_id
+        - int usuarioId
         - String nome
         - String tipo
-        +getUsuario_id(): int
-        +setUsuario_id(int): void
+        +getUsuarioId(): int
+        +setUsuarioId(int): void
         +getNome(): String
         +setNome(String): void
         +getTipo(): String

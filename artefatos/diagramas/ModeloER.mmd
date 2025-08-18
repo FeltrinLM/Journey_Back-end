@@ -4,28 +4,28 @@ erDiagram
     USUARIO ||--o{ HISTORICO_ALTERACAO : registra
 
     USUARIO {
-        int usuario_id PK
+        int usuarioId PK
         string nome
         string senha
         string tipo  "ADMINISTRADOR|FUNCIONARIO"
     }
 
     COLECAO {
-        int colecao_id PK
+        int colecaoId PK
         string nome
-        date data_inicio
-        date data_fim
+        date dataInicio
+        date dataFim
     }
 
     ESTAMPA {
-        int estampa_id PK
+        int estampaId PK
         string nome
         int quantidade
-        int colecao_id FK
+        int colecaoId FK
     }
 
     PECA {
-        int peca_id PK
+        int pecaId PK
         string tipo
         string tamanho
         string cor
@@ -33,24 +33,24 @@ erDiagram
     }
 
     ADESIVO {
-        int adesivo_id PK
+        int adesivoId PK
         string adesivo_modelo
         boolean cromatico
     }
 
     CHAVEIRO {
-        int chaveiro_id PK
-        string chaveiro_modelo
-        int colecao_id FK
+        int chaveiroId PK
+        string chaveiroModelo
+        int colecaoId FK
     }
 
     HISTORICO_ALTERACAO {
         int id PK
         string entidade         "Nome da entidade alterada (ex: 'Peca')"
-        int entidade_id         "ID da entidade alterada"
-        string campo_alterado   "Campo alterado (ex: 'quantidade')"
-        string valor_antigo
-        string valor_novo
-        datetime data_hora
-        int usuario_id FK
+        int entidadeId         "ID da entidade alterada"
+        string campoAlterado   "Campo alterado (ex: 'quantidade')"
+        string valorAntigo
+        string valorNovo
+        datetime dataHora
+        int usuarioId FK
     }
