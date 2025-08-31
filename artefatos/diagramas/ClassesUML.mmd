@@ -82,20 +82,19 @@ classDiagram
         - String senha
         - TipoUsuario tipo
         - List<HistoricoAlteracao> historicos
-        +Usuario()
-        +Usuario(String nome, String senha, TipoUsuario tipo)
-        +getUsuarioId(): int
-        +setUsuarioId(int): void
-        +getNome(): String
-        +setNome(String): void
-        +getSenha(): String
-        +setSenha(String): void
-        +getTipo(): TipoUsuario
-        +setTipo(TipoUsuario): void
-        +getHistoricos(): List<HistoricoAlteracao>
-        +setHistoricos(List<HistoricoAlteracao>): void
+        + Usuario()
+        + Usuario(String nome, String senha, TipoUsuario tipo)
+        + getUsuarioId(): int
+        + setUsuarioId(int): void
+        + getNome(): String
+        + setNome(String): void
+        + getSenha(): String
+        + setSenha(String): void
+        + getTipo(): TipoUsuario
+        + setTipo(TipoUsuario): void
+        + getHistoricos(): List<HistoricoAlteracao>
+        + setHistoricos(List<HistoricoAlteracao>): void
     }
-
 
     class TipoUsuario {
         <<enumeration>>
@@ -104,7 +103,7 @@ classDiagram
     }
 
     class HistoricoAlteracao {
-        - int id
+        - Long id
         - String entidade
         - int entidadeId
         - String campoAlterado
@@ -112,8 +111,8 @@ classDiagram
         - String valorNovo
         - LocalDateTime dataHora
         - Usuario usuario
-        + getId(): int
-        + setId(int): void
+        + getId(): Long
+        + setId(Long): void
         + getEntidade(): String
         + setEntidade(String): void
         + getEntidadeId(): int

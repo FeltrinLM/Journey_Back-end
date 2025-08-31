@@ -24,7 +24,10 @@ public class UsuarioMapper {
         Usuario usuario = new Usuario();
         usuario.setUsuarioId(dto.getUsuarioId());
         usuario.setNome(dto.getNome());
-        usuario.setTipo(TipoUsuario.valueOf(dto.getTipo())); // converte string para enum
+        // converte string para enum (normaliza para maiúsculas para evitar IllegalArgumentException)
+        if (dto.getTipo() != null) {
+            usuario.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
+        }
         return usuario;
     }
 }

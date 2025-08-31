@@ -20,4 +20,7 @@ public interface HistoricoAlteracaoRepository extends JpaRepository<HistoricoAlt
 
     // Buscar todos os históricos ordenados por data/hora decrescente
     List<HistoricoAlteracao> findAllByOrderByDataHoraDesc();
+
+    // Verifica se existem logs vinculados a um usuário (como autor do histórico)
+    boolean existsByUsuarioUsuarioId(int usuarioId);
 }

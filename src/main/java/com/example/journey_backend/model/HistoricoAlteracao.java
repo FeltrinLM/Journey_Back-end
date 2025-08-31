@@ -4,27 +4,31 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "historicoAlteracao")
+@Table(name = "historico_alteracao")  // Define o nome da tabela no banco de dados.
 public class HistoricoAlteracao {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id     // Define a chave primária.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremento (estratégia do banco).
     private Long id;
 
-    private String entidade;      // Ex: "Peca", "Colecao"
-    private int entidadeId;       // ID da entidade alterada
+    private String entidade;      // Nome da entidade alterada (Ex: "Peca", "Colecao").
+    private int entidadeId;       // ID da entidade alterada.
 
-    private String campoAlterado; // Ex: "quantidade", "nome"
-    private String valorAntigo;
-    private String valorNovo;
+    private String campoAlterado; // Campo que foi alterado (Ex: "quantidade", "nome").
+    private String valorAntigo;   // Valor antigo do campo.
+    private String valorNovo;     // Valor novo do campo.
 
-    private LocalDateTime dataHora;
+    @Column(nullable = false)
+    private LocalDateTime dataHora; // Data e hora da alteração.
 
-    @ManyToOne
-    @JoinColumn(name = "usuarioId")
-    private Usuario usuario; // usuário que fez a alteração
+    @ManyToOne(fetch = FetchType.LAZY)  // Muitos históricos podem estar ligados a um único usuário.
+    @JoinColumn(name = "usuarioId", nullable = false) // Cria a FK na tabela historicoAlteracao.
+    private Usuario usuario;  // Usuário que realizou a alteração.
 
-    // ================== GETTERS E SETTERS ==================
+    // Construtor padrão (obrigatório para JPA).
+    public HistoricoAlteracao() {}
+
+    // Getters e Setters.
 
     public Long getId() {
         return id;

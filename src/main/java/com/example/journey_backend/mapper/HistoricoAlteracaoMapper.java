@@ -23,13 +23,18 @@ public class HistoricoAlteracaoMapper {
     // Converte DTO → Model
     public static HistoricoAlteracao toModel(HistoricoAlteracaoDTO dto, Usuario usuario) {
         HistoricoAlteracao model = new HistoricoAlteracao();
-        model.setId(dto.getId());
+
+        // Evita forçar ID=0 no model em operações de CREATE (deixe o JPA gerar)
+        if (dto.getId() > 0) {
+            model.setId(dto.getId());
+        }
+
         model.setEntidade(dto.getEntidade());
         model.setEntidadeId(dto.getEntidadeId());
         model.setCampoAlterado(dto.getCampoAlterado());
         model.setValorAntigo(dto.getValorAntigo());
         model.setValorNovo(dto.getValorNovo());
-        model.setDataHora(dto.getDataHora());
+        model.setDataHora(dto.getDataHora()); // se vier nulo, o service garante now()
         model.setUsuario(usuario);
         return model;
     }

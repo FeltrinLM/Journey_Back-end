@@ -1,6 +1,9 @@
 package com.example.journey_backend.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity     // Define a classe como uma entidade JPA.
 public class Usuario {
@@ -15,12 +18,17 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremento (estratégia do banco).
     private int usuarioId;
 
+    @Column(unique = true)       // Evita duplicidade de nomes de usuário no banco.
     private String nome;  // Nome do usuário.
     private String senha; // Senha do usuário (armazenar sempre em formato hash).
 
     @Enumerated(EnumType.STRING)  // Armazena o valor do enum como texto no banco de dados.
     @Column(nullable = false)     // Define que o campo não pode ser nulo.
     private TipoUsuario tipo;     // Tipo do usuário: ADMINISTRADOR ou FUNCIONARIO.
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY) // Um usuário pode ter vários históricos de alteração.
+    @JsonIgnore // Evita loop infinito na serialização JSON.
+    private List<HistoricoAlteracao> historicos = new ArrayList<>();
 
     // Construtor padrão (obrigatório para JPA).
     public Usuario() {}
@@ -64,5 +72,13 @@ public class Usuario {
 
     public void setTipo(TipoUsuario tipo) {
         this.tipo = tipo;
+    }
+
+    public List<HistoricoAlteracao> getHistoricos() {
+        return historicos;
+    }
+
+    public void setHistoricos(List<HistoricoAlteracao> historicos) {
+        this.historicos = historicos;
     }
 }

@@ -59,8 +59,13 @@ public class UsuarioController {
     // DELETE /api/usuarios/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable int id) {
-        usuarioService.deletarUsuario(id);
-        return ResponseEntity.noContent().build();
+        try {
+            usuarioService.deletarUsuario(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalStateException e) {
+            // Conflito de integridade: usuário possui histórico vinculado
+            return ResponseEntity.status(409).build(); // 409 Conflict
+        }
     }
 
     // POST /api/usuarios/login
