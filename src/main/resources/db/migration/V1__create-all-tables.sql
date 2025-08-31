@@ -1,54 +1,65 @@
-CREATE TABLE usuario (
-                         usuarioId SERIAL PRIMARY KEY,
-                         nome VARCHAR(100) NOT NULL,
-                         senha VARCHAR(100) NOT NULL,
-                         tipo VARCHAR(20) NOT NULL
+-- ========================
+-- V1 - Criação das tabelas
+-- ========================
+
+-- ===== USUARIO =====
+CREATE TABLE "usuario" (
+                           "usuarioId" SERIAL PRIMARY KEY,
+                           "nome" VARCHAR(100) NOT NULL UNIQUE,
+                           "senha" VARCHAR(100) NOT NULL,
+                           "tipo"  VARCHAR(20)  NOT NULL
 );
 
-CREATE TABLE colecao (
-                         colecaoId SERIAL PRIMARY KEY,
-                         nome VARCHAR(100) NOT NULL,
-                         dataInicio DATE NOT NULL,
-                         dataFim DATE
+-- ===== COLECAO =====
+CREATE TABLE "colecao" (
+                           "colecaoId"  SERIAL PRIMARY KEY,
+                           "nome"       VARCHAR(100) NOT NULL,
+                           "dataInicio" DATE NOT NULL,
+                           "dataFim"    DATE
 );
 
-CREATE TABLE estampa (
-                         estampaId SERIAL PRIMARY KEY,
-                         nome VARCHAR(100) NOT NULL,
-                         quantidade INTEGER NOT NULL,
-                         colecaoId INTEGER NOT NULL,
-                         FOREIGN KEY (colecaoId) REFERENCES colecao(colecaoId)
+-- ===== ESTAMPA =====
+CREATE TABLE "estampa" (
+                           "estampaId" SERIAL PRIMARY KEY,
+                           "nome"      VARCHAR(100) NOT NULL,
+                           "quantidade" INTEGER NOT NULL,
+                           "colecaoId"  INTEGER NOT NULL,
+                           CONSTRAINT fk_estampa_colecao FOREIGN KEY ("colecaoId") REFERENCES "colecao"("colecaoId")
 );
 
-CREATE TABLE peca (
-                      pecaId SERIAL PRIMARY KEY,
-                      tipo VARCHAR(50) NOT NULL,
-                      tamanho VARCHAR(50) NOT NULL,
-                      cor VARCHAR(50) NOT NULL,
-                      quantidade INTEGER NOT NULL
+-- ===== PECA =====
+CREATE TABLE "peca" (
+                        "pecaId"    SERIAL PRIMARY KEY,
+                        "tipo"      VARCHAR(50) NOT NULL,
+                        "tamanho"   VARCHAR(50) NOT NULL,
+                        "cor"       VARCHAR(50) NOT NULL,
+                        "quantidade" INTEGER NOT NULL
 );
 
-CREATE TABLE adesivo (
-                         adesivoId SERIAL PRIMARY KEY,
-                         adesivo_modelo VARCHAR(100) NOT NULL,
-                         cromatico BOOLEAN NOT NULL
+-- ===== ADESIVO =====
+CREATE TABLE "adesivo" (
+                           "adesivoId"     SERIAL PRIMARY KEY,
+                           "adesivoModelo" VARCHAR(100) NOT NULL,
+                           "cromatico"     BOOLEAN NOT NULL
 );
 
-CREATE TABLE chaveiro (
-                          chaveiroId SERIAL PRIMARY KEY,
-                          chaveiroModelo VARCHAR(100) NOT NULL,
-                          colecaoId INTEGER NOT NULL,
-                          FOREIGN KEY (colecaoId) REFERENCES colecao(colecaoId)
+-- ===== CHAVEIRO =====
+CREATE TABLE "chaveiro" (
+                            "chaveiroId"     SERIAL PRIMARY KEY,
+                            "chaveiroModelo" VARCHAR(100) NOT NULL,
+                            "colecaoId"      INTEGER NOT NULL,
+                            CONSTRAINT fk_chaveiro_colecao FOREIGN KEY ("colecaoId") REFERENCES "colecao"("colecaoId")
 );
 
-CREATE TABLE historico_alteracao (
-                                     id SERIAL PRIMARY KEY,
-                                     entidade VARCHAR(100) NOT NULL,
-                                     entidadeId INTEGER NOT NULL,
-                                     campoAlterado VARCHAR(100) NOT NULL,
-                                     valorAntigo TEXT,
-                                     valorNovo TEXT,
-                                     dataHora TIMESTAMP NOT NULL,
-                                     usuarioId INTEGER NOT NULL,
-                                     FOREIGN KEY (usuarioId) REFERENCES usuario(usuarioId)
+-- ===== HISTORICO ALTERACAO =====
+CREATE TABLE "historicoAlteracao" (
+                                      "id"           BIGSERIAL PRIMARY KEY, -- já cria como BIGINT
+                                      "entidade"     VARCHAR(100) NOT NULL,
+                                      "entidadeId"   INTEGER NOT NULL,
+                                      "campoAlterado" VARCHAR(100) NOT NULL,
+                                      "valorAntigo"  TEXT,
+                                      "valorNovo"    TEXT,
+                                      "dataHora"     TIMESTAMP NOT NULL,
+                                      "usuarioId"    INTEGER NOT NULL,
+                                      CONSTRAINT fk_hist_usuario FOREIGN KEY ("usuarioId") REFERENCES "usuario"("usuarioId")
 );

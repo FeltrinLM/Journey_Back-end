@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "historico_alteracao")  // Define o nome da tabela no banco de dados.
+@Table(name = "historicoAlteracao")  // Define o nome da tabela no banco de dados.
 public class HistoricoAlteracao {
 
     @Id     // Define a chave primária.

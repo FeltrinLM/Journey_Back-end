@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity     //define a classe como uma entidade JPA.
+@Table(name = "colecao")
 public class Colecao {
 
     @Id     //define a chave primária.

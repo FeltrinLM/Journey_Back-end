@@ -3,6 +3,7 @@ package com.example.journey_backend.model;
 import jakarta.persistence.*;
 
 @Entity        //define a classe como uma entidade JPA.
+@Table(name = "adesivo")
 public class Adesivo {
 
     @Id     //define a chave primária.

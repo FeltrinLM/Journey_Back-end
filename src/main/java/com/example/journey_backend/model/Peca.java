@@ -3,6 +3,7 @@ package com.example.journey_backend.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "peca")
 public class Peca {
 
     @Id

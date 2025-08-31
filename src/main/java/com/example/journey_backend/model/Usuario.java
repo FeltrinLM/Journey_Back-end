@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity     // Define a classe como uma entidade JPA.
+@Table(name = "usuario")
 public class Usuario {
 
     // Enum interno que representa os tipos possíveis de usuário no sistema.
