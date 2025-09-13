@@ -1,9 +1,16 @@
 package com.example.journey_backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class UsuarioDTO {
 
     private int usuarioId;
+
+    @NotBlank
     private String nome;
+
+    @NotNull
     private String tipo;
 
     public UsuarioDTO() {}

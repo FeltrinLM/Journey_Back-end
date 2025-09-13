@@ -4,11 +4,11 @@ import com.example.journey_backend.dto.AdesivoDTO;
 import com.example.journey_backend.mapper.AdesivoMapper;
 import com.example.journey_backend.model.Adesivo;
 import com.example.journey_backend.repository.AdesivoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,8 +26,9 @@ public class AdesivoService {
 
     // Buscar adesivo por ID
     public AdesivoDTO buscarPorId(int id) {
-        Optional<Adesivo> adesivo = adesivoRepository.findById(id);
-        return adesivo.map(AdesivoMapper::toDTO).orElse(null);
+        Adesivo adesivo = adesivoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Adesivo não encontrado com ID: " + id));
+        return AdesivoMapper.toDTO(adesivo);
     }
 
     // Criar novo adesivo
@@ -40,7 +41,7 @@ public class AdesivoService {
     // Editar adesivo existente
     public AdesivoDTO editarAdesivo(int id, AdesivoDTO dto) {
         Adesivo adesivoExistente = adesivoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Adesivo não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Adesivo não encontrado com ID: " + id));
 
         adesivoExistente.setAdesivoModelo(dto.getAdesivoModelo());
         adesivoExistente.setCromatico(dto.isCromatico());
@@ -51,6 +52,9 @@ public class AdesivoService {
 
     // Deletar adesivo por ID
     public void deletarAdesivo(int id) {
+        if (!adesivoRepository.existsById(id)) {
+            throw new EntityNotFoundException("Adesivo não encontrado com ID: " + id);
+        }
         adesivoRepository.deleteById(id);
     }
 }

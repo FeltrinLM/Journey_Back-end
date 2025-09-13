@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,35 +29,28 @@ public class PecaController {
     @GetMapping("/{id}")
     public ResponseEntity<PecaDTO> buscarPorId(@PathVariable int id) {
         PecaDTO peca = pecaService.buscarPorId(id);
-        if (peca != null) {
-            return ResponseEntity.ok(peca);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(peca); // se não existir, service lança 404
     }
 
     // POST /api/pecas
     @PostMapping
-    public ResponseEntity<PecaDTO> criar(@RequestBody PecaDTO dto) {
+    public ResponseEntity<PecaDTO> criar(@Valid @RequestBody PecaDTO dto) {
         PecaDTO criada = pecaService.criarPeca(dto);
-        return ResponseEntity.ok(criada);
+        return ResponseEntity.created(URI.create("/api/pecas/" + criada.getPecaId()))
+                .body(criada);
     }
 
     // PUT /api/pecas/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<PecaDTO> editar(@PathVariable int id, @RequestBody PecaDTO dto) {
-        try {
-            PecaDTO atualizada = pecaService.editarPeca(id, dto);
-            return ResponseEntity.ok(atualizada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<PecaDTO> editar(@PathVariable int id, @Valid @RequestBody PecaDTO dto) {
+        PecaDTO atualizada = pecaService.editarPeca(id, dto);
+        return ResponseEntity.ok(atualizada); // se não existir, service lança 404
     }
 
     // DELETE /api/pecas/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable int id) {
         pecaService.deletarPeca(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // 204
     }
 }

@@ -1,6 +1,8 @@
 package com.example.journey_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "peca")
@@ -10,11 +12,17 @@ public class Peca {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pecaId;
 
+    @NotBlank
     private String tipo;
-    private String tamanho;
-    private String cor;
-    private int quantidade;
 
+    @NotBlank
+    private String tamanho;
+
+    @NotBlank
+    private String cor;
+
+    @Min(0)
+    private int quantidade;
 
     // Construtor vazio (obrigatório para JPA).
     public Peca() {}
@@ -27,9 +35,7 @@ public class Peca {
         this.quantidade = quantidade;
     }
 
-
     // Getters e Setters
-
     public int getPecaId() {
         return pecaId;
     }
@@ -46,7 +52,9 @@ public class Peca {
         this.tipo = tipo;
     }
 
-    public String getTamanho() {return tamanho; }
+    public String getTamanho() {
+        return tamanho;
+    }
 
     public void setTamanho(String tamanho) {
         this.tamanho = tamanho;

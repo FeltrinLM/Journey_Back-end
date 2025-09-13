@@ -1,13 +1,14 @@
 package com.example.journey_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "historicoAlteracao")  // Define o nome da tabela no banco de dados.
+@Table(name = "historicoAlteracao") // Nome da tabela padronizado em snake_case
 public class HistoricoAlteracao {
 
-    @Id     // Define a chave primária.
+    @Id // Define a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremento (estratégia do banco).
     private Long id;
 
@@ -18,18 +19,19 @@ public class HistoricoAlteracao {
     private String valorAntigo;   // Valor antigo do campo.
     private String valorNovo;     // Valor novo do campo.
 
+    @NotNull
     @Column(nullable = false)
     private LocalDateTime dataHora; // Data e hora da alteração.
 
-    @ManyToOne(fetch = FetchType.LAZY)  // Muitos históricos podem estar ligados a um único usuário.
-    @JoinColumn(name = "usuarioId", nullable = false) // Cria a FK na tabela historicoAlteracao.
+    @ManyToOne(fetch = FetchType.LAZY) // Muitos históricos podem estar ligados a um único usuário.
+    @JoinColumn(name = "usuarioId", nullable = false) // Cria a FK na tabela historico_alteracao.
+    @NotNull
     private Usuario usuario;  // Usuário que realizou a alteração.
 
     // Construtor padrão (obrigatório para JPA).
     public HistoricoAlteracao() {}
 
-    // Getters e Setters.
-
+    // Getters e Setters
     public Long getId() {
         return id;
     }

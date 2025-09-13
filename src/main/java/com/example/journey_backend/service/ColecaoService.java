@@ -4,11 +4,11 @@ import com.example.journey_backend.dto.ColecaoDTO;
 import com.example.journey_backend.mapper.ColecaoMapper;
 import com.example.journey_backend.model.Colecao;
 import com.example.journey_backend.repository.ColecaoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,8 +26,9 @@ public class ColecaoService {
 
     // Buscar coleção por ID
     public ColecaoDTO buscarPorId(int id) {
-        Optional<Colecao> colecao = colecaoRepository.findById(id);
-        return colecao.map(ColecaoMapper::toDTO).orElse(null);
+        Colecao colecao = colecaoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Coleção não encontrada com ID: " + id));
+        return ColecaoMapper.toDTO(colecao);
     }
 
     // Criar nova coleção
@@ -40,7 +41,7 @@ public class ColecaoService {
     // Editar coleção existente
     public ColecaoDTO editarColecao(int id, ColecaoDTO dto) {
         Colecao existente = colecaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Coleção não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Coleção não encontrada com ID: " + id));
 
         existente.setNome(dto.getNome());
         existente.setDataInicio(dto.getDataInicio());
@@ -52,6 +53,9 @@ public class ColecaoService {
 
     // Deletar coleção por ID
     public void deletarColecao(int id) {
+        if (!colecaoRepository.existsById(id)) {
+            throw new EntityNotFoundException("Coleção não encontrada com ID: " + id);
+        }
         colecaoRepository.deleteById(id);
     }
 }

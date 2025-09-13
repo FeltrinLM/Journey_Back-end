@@ -4,11 +4,11 @@ import com.example.journey_backend.dto.PecaDTO;
 import com.example.journey_backend.mapper.PecaMapper;
 import com.example.journey_backend.model.Peca;
 import com.example.journey_backend.repository.PecaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,8 +26,9 @@ public class PecaService {
 
     // Buscar peça por ID
     public PecaDTO buscarPorId(int id) {
-        Optional<Peca> peca = pecaRepository.findById(id);
-        return peca.map(PecaMapper::toDTO).orElse(null);
+        Peca peca = pecaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Peça não encontrada com ID: " + id));
+        return PecaMapper.toDTO(peca);
     }
 
     // Criar nova peça
@@ -40,7 +41,7 @@ public class PecaService {
     // Editar peça existente
     public PecaDTO editarPeca(int id, PecaDTO dto) {
         Peca existente = pecaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Peça não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Peça não encontrada com ID: " + id));
 
         existente.setTipo(dto.getTipo());
         existente.setTamanho(dto.getTamanho());
@@ -53,6 +54,9 @@ public class PecaService {
 
     // Deletar peça por ID
     public void deletarPeca(int id) {
+        if (!pecaRepository.existsById(id)) {
+            throw new EntityNotFoundException("Peça não encontrada com ID: " + id);
+        }
         pecaRepository.deleteById(id);
     }
 }

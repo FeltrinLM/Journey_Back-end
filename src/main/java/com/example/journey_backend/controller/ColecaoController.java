@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,39 +29,28 @@ public class ColecaoController {
     @GetMapping("/{id}")
     public ResponseEntity<ColecaoDTO> buscarPorId(@PathVariable int id) {
         ColecaoDTO dto = colecaoService.buscarPorId(id);
-        if (dto != null) {
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(dto); // se não existir, service lança 404
     }
 
     // POST /api/colecoes
     @PostMapping
-    public ResponseEntity<ColecaoDTO> criar(@RequestBody ColecaoDTO dto) {
-        try {
-            ColecaoDTO criado = colecaoService.criarColecao(dto);
-            return ResponseEntity.ok(criado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<ColecaoDTO> criar(@Valid @RequestBody ColecaoDTO dto) {
+        ColecaoDTO criado = colecaoService.criarColecao(dto);
+        return ResponseEntity.created(URI.create("/api/colecoes/" + criado.getColecaoId()))
+                .body(criado);
     }
 
     // PUT /api/colecoes/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<ColecaoDTO> editar(@PathVariable int id, @RequestBody ColecaoDTO dto) {
-        try {
-            ColecaoDTO atualizado = colecaoService.editarColecao(id, dto);
-            return ResponseEntity.ok(atualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ColecaoDTO> editar(@PathVariable int id, @Valid @RequestBody ColecaoDTO dto) {
+        ColecaoDTO atualizado = colecaoService.editarColecao(id, dto);
+        return ResponseEntity.ok(atualizado); // se não existir, service lança 404
     }
 
     // DELETE /api/colecoes/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable int id) {
         colecaoService.deletarColecao(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // 204
     }
 }

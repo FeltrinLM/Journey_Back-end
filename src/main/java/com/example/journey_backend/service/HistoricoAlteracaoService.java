@@ -6,13 +6,13 @@ import com.example.journey_backend.model.HistoricoAlteracao;
 import com.example.journey_backend.model.Usuario;
 import com.example.journey_backend.repository.HistoricoAlteracaoRepository;
 import com.example.journey_backend.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // transações
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,8 +37,9 @@ public class HistoricoAlteracaoService {
      * Retorna uma alteração específica pelo ID
      */
     public HistoricoAlteracaoDTO buscarPorId(Long id) {
-        Optional<HistoricoAlteracao> historico = historicoRepository.findById(id);
-        return historico.map(HistoricoAlteracaoMapper::toDTO).orElse(null);
+        HistoricoAlteracao historico = historicoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Histórico não encontrado com ID: " + id));
+        return HistoricoAlteracaoMapper.toDTO(historico);
     }
 
     /**
@@ -48,7 +49,7 @@ public class HistoricoAlteracaoService {
     @Transactional
     public void registrarAlteracao(HistoricoAlteracaoDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado para registrar histórico."));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + dto.getUsuarioId()));
 
         HistoricoAlteracao model = HistoricoAlteracaoMapper.toModel(dto, usuario);
 

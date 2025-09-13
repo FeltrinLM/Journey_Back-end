@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,39 +29,28 @@ public class ChaveiroController {
     @GetMapping("/{id}")
     public ResponseEntity<ChaveiroDTO> buscarPorId(@PathVariable int id) {
         ChaveiroDTO dto = chaveiroService.buscarPorId(id);
-        if (dto != null) {
-            return ResponseEntity.ok(dto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(dto); // se não existir, service lança 404
     }
 
     // POST /api/chaveiros
     @PostMapping
-    public ResponseEntity<ChaveiroDTO> criar(@RequestBody ChaveiroDTO dto) {
-        try {
-            ChaveiroDTO criado = chaveiroService.criarChaveiro(dto);
-            return ResponseEntity.ok(criado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<ChaveiroDTO> criar(@Valid @RequestBody ChaveiroDTO dto) {
+        ChaveiroDTO criado = chaveiroService.criarChaveiro(dto);
+        return ResponseEntity.created(URI.create("/api/chaveiros/" + criado.getChaveiroId()))
+                .body(criado);
     }
 
     // PUT /api/chaveiros/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<ChaveiroDTO> editar(@PathVariable int id, @RequestBody ChaveiroDTO dto) {
-        try {
-            ChaveiroDTO atualizado = chaveiroService.editarChaveiro(id, dto);
-            return ResponseEntity.ok(atualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ChaveiroDTO> editar(@PathVariable int id, @Valid @RequestBody ChaveiroDTO dto) {
+        ChaveiroDTO atualizado = chaveiroService.editarChaveiro(id, dto);
+        return ResponseEntity.ok(atualizado); // se não existir, service lança 404
     }
 
     // DELETE /api/chaveiros/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable int id) {
         chaveiroService.deletarChaveiro(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build(); // 204
     }
 }

@@ -1,11 +1,14 @@
 package com.example.journey_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity     // Define a classe como uma entidade JPA.
+@Entity // Define a classe como uma entidade JPA.
 @Table(name = "usuario")
 public class Usuario {
 
@@ -15,17 +18,22 @@ public class Usuario {
         FUNCIONARIO
     }
 
-    @Id     // Define a chave primária.
+    @Id // Define a chave primária.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremento (estratégia do banco).
     private int usuarioId;
 
-    @Column(unique = true)       // Evita duplicidade de nomes de usuário no banco.
-    private String nome;  // Nome do usuário.
+    @Column(unique = true) // Evita duplicidade de nomes de usuário no banco.
+    @NotBlank
+    private String nome; // Nome do usuário.
+
+    @NotBlank
+    @Size(min = 8)
     private String senha; // Senha do usuário (armazenar sempre em formato hash).
 
-    @Enumerated(EnumType.STRING)  // Armazena o valor do enum como texto no banco de dados.
-    @Column(nullable = false)     // Define que o campo não pode ser nulo.
-    private TipoUsuario tipo;     // Tipo do usuário: ADMINISTRADOR ou FUNCIONARIO.
+    @Enumerated(EnumType.STRING) // Armazena o valor do enum como texto no banco de dados.
+    @Column(nullable = false)
+    @NotNull
+    private TipoUsuario tipo; // Tipo do usuário: ADMINISTRADOR ou FUNCIONARIO.
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY) // Um usuário pode ter vários históricos de alteração.
     @JsonIgnore // Evita loop infinito na serialização JSON.
@@ -42,7 +50,6 @@ public class Usuario {
     }
 
     // Getters e Setters.
-
     public int getUsuarioId() {
         return usuarioId;
     }

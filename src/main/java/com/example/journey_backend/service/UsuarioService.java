@@ -7,9 +7,10 @@ import com.example.journey_backend.model.Usuario.TipoUsuario;
 import com.example.journey_backend.model.HistoricoAlteracao;
 import com.example.journey_backend.repository.UsuarioRepository;
 import com.example.journey_backend.repository.HistoricoAlteracaoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // transações
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,15 +35,16 @@ public class UsuarioService {
 
     // Buscar usuário por ID
     public UsuarioDTO buscarPorId(int id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        return usuario.map(UsuarioMapper::toDTO).orElse(null);
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
+        return UsuarioMapper.toDTO(usuario);
     }
 
     // Criar novo usuário
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO dto) {
         if (usuarioRepository.existsByNome(dto.getNome())) {
-            throw new RuntimeException("Usuário com esse nome já existe.");
+            throw new IllegalArgumentException("Usuário com esse nome já existe.");
         }
         Usuario novoUsuario = UsuarioMapper.toModel(dto);
         Usuario salvo = usuarioRepository.save(novoUsuario);
@@ -53,12 +55,11 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO dto, Usuario autor) {
         if (usuarioRepository.existsByNome(dto.getNome())) {
-            throw new RuntimeException("Usuário com esse nome já existe.");
+            throw new IllegalArgumentException("Usuário com esse nome já existe.");
         }
         Usuario novoUsuario = UsuarioMapper.toModel(dto);
         Usuario salvo = usuarioRepository.save(novoUsuario);
 
-        // Registrar criação (se autor informado)
         logAlteracao(autor,
                 "Usuario", salvo.getUsuarioId(),
                 "__CREATE__", null,
@@ -71,7 +72,7 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO editarUsuario(int id, UsuarioDTO dto) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
         usuarioExistente.setNome(dto.getNome());
         usuarioExistente.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
@@ -84,31 +85,27 @@ public class UsuarioService {
     @Transactional
     public UsuarioDTO editarUsuario(int id, UsuarioDTO dto, Usuario autor) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
-        // Captura valores antigos para comparação
         String nomeAntigo = usuarioExistente.getNome();
         TipoUsuario tipoAntigo = usuarioExistente.getTipo();
 
-        // Aplica alterações
         usuarioExistente.setNome(dto.getNome());
         usuarioExistente.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
 
         Usuario atualizado = usuarioRepository.save(usuarioExistente);
 
-        // Registrar alterações campo a campo (se autor informado)
         if (autor != null) {
-            if (nomeAntigo != null ? !nomeAntigo.equals(atualizado.getNome()) : atualizado.getNome() != null) {
+            if (!nomeAntigo.equals(atualizado.getNome())) {
                 logAlteracao(autor, "Usuario", atualizado.getUsuarioId(),
                         "nome", nomeAntigo, atualizado.getNome());
             }
-            if (tipoAntigo != null ? !tipoAntigo.equals(atualizado.getTipo()) : atualizado.getTipo() != null) {
+            if (!tipoAntigo.equals(atualizado.getTipo())) {
                 logAlteracao(autor, "Usuario", atualizado.getUsuarioId(),
                         "tipo",
                         tipoAntigo == null ? null : tipoAntigo.name(),
                         atualizado.getTipo() == null ? null : atualizado.getTipo().name());
             }
-            // ⚠️ intencionalmente NÃO logamos senha aqui.
         }
 
         return UsuarioMapper.toDTO(atualizado);
@@ -117,9 +114,11 @@ public class UsuarioService {
     // Deletar usuário por ID
     @Transactional
     public void deletarUsuario(int id) {
-        // Evita violar FK de histórico (usuarioId não pode ser nulo)
         if (historicoRepository.existsByUsuarioUsuarioId(id)) {
             throw new IllegalStateException("Não é possível deletar um usuário que possui histórico de alterações.");
+        }
+        if (!usuarioRepository.existsById(id)) {
+            throw new EntityNotFoundException("Usuário não encontrado com ID: " + id);
         }
         usuarioRepository.deleteById(id);
     }
@@ -128,13 +127,12 @@ public class UsuarioService {
     @Transactional
     public void deletarUsuario(int id, Usuario autor) {
         Usuario alvo = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
         if (historicoRepository.existsByUsuarioUsuarioId(id)) {
             throw new IllegalStateException("Não é possível deletar um usuário que possui histórico de alterações.");
         }
 
-        // Registrar intenção de deleção (se autor informado)
         logAlteracao(autor,
                 "Usuario", alvo.getUsuarioId(),
                 "__DELETE__", "nome=" + alvo.getNome() + "; tipo=" + alvo.getTipo(), null);
@@ -144,13 +142,14 @@ public class UsuarioService {
 
     // Validação de login
     public boolean validarLogin(String nome, String senha) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByNome(nome);
-        return usuarioOpt.map(usuario -> usuario.getSenha().equals(senha)).orElse(false);
+        return usuarioRepository.findByNome(nome)
+                .map(usuario -> usuario.getSenha().equals(senha))
+                .orElse(false);
     }
 
     // Verificar se não há nenhum usuário no sistema
     public boolean sistemaSemUsuarios() {
-        return usuarioRepository.count() == 0; // mais eficiente que findAll().isEmpty()
+        return usuarioRepository.count() == 0;
     }
 
     // Criar usuário administrador padrão
@@ -162,12 +161,11 @@ public class UsuarioService {
 
         Usuario admin = new Usuario();
         admin.setNome("admin");
-        admin.setSenha("admin"); // ⚠️ Em produção, aplicar hash seguro
+        admin.setSenha("admin"); // ⚠️ em produção, aplicar hash seguro
         admin.setTipo(TipoUsuario.ADMINISTRADOR);
 
         Usuario salvo = usuarioRepository.save(admin);
 
-        // Registrar criação do admin padrão usando ele mesmo como autor
         logAlteracao(salvo,
                 "Usuario", salvo.getUsuarioId(),
                 "__CREATE_ADMIN__", null,
@@ -177,8 +175,6 @@ public class UsuarioService {
     }
 
     // ================== Helpers de histórico ==================
-
-    // Cria e persiste um registro de histórico (somente se autor != null)
     private void logAlteracao(Usuario autor,
                               String entidade,
                               int entidadeId,
@@ -194,7 +190,7 @@ public class UsuarioService {
         h.setValorAntigo(valorAntigo);
         h.setValorNovo(valorNovo);
         h.setDataHora(LocalDateTime.now());
-        h.setUsuario(autor); // usuário que realizou a ação
+        h.setUsuario(autor);
 
         historicoRepository.save(h);
     }

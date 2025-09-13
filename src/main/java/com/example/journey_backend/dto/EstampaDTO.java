@@ -1,17 +1,27 @@
 package com.example.journey_backend.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class EstampaDTO {
 
     private int estampaId;
+
+    @NotBlank
     private String nome;
+
+    @Min(0)
     private int quantidade;
-    private int colecaoId;
+
+    @NotNull
+    private Integer colecaoId;
 
     // Construtor vazio
     public EstampaDTO() {}
 
     // Construtor com parâmetros
-    public EstampaDTO(int estampaId, String nome, int quantidade, int colecaoId) {
+    public EstampaDTO(int estampaId, String nome, int quantidade, Integer colecaoId) {
         this.estampaId = estampaId;
         this.nome = nome;
         this.quantidade = quantidade;
@@ -19,7 +29,6 @@ public class EstampaDTO {
     }
 
     // Getters e Setters
-
     public int getEstampaId() {
         return estampaId;
     }
@@ -44,12 +53,11 @@ public class EstampaDTO {
         this.quantidade = quantidade;
     }
 
-    public int getColecaoId() {
+    public Integer getColecaoId() {
         return colecaoId;
     }
 
-    public void setColecaoId(int colecaoId) {
+    public void setColecaoId(Integer colecaoId) {
         this.colecaoId = colecaoId;
     }
-
 }

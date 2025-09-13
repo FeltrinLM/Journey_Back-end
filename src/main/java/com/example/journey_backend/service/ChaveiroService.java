@@ -6,11 +6,11 @@ import com.example.journey_backend.model.Chaveiro;
 import com.example.journey_backend.model.Colecao;
 import com.example.journey_backend.repository.ChaveiroRepository;
 import com.example.journey_backend.repository.ColecaoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,14 +31,15 @@ public class ChaveiroService {
 
     // Buscar chaveiro por ID
     public ChaveiroDTO buscarPorId(int id) {
-        Optional<Chaveiro> chaveiro = chaveiroRepository.findById(id);
-        return chaveiro.map(ChaveiroMapper::toDTO).orElse(null);
+        Chaveiro chaveiro = chaveiroRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Chaveiro não encontrado com ID: " + id));
+        return ChaveiroMapper.toDTO(chaveiro);
     }
 
     // Criar novo chaveiro
     public ChaveiroDTO criarChaveiro(ChaveiroDTO dto) {
         Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
-                .orElseThrow(() -> new RuntimeException("Coleção não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Coleção não encontrada com ID: " + dto.getColecaoId()));
 
         Chaveiro chaveiro = ChaveiroMapper.toModel(dto, colecao);
         Chaveiro salvo = chaveiroRepository.save(chaveiro);
@@ -48,10 +49,10 @@ public class ChaveiroService {
     // Editar chaveiro existente
     public ChaveiroDTO editarChaveiro(int id, ChaveiroDTO dto) {
         Chaveiro existente = chaveiroRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chaveiro não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Chaveiro não encontrado com ID: " + id));
 
         Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
-                .orElseThrow(() -> new RuntimeException("Coleção não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Coleção não encontrada com ID: " + dto.getColecaoId()));
 
         existente.setChaveiroModelo(dto.getChaveiroModelo());
         existente.setColecao(colecao);
@@ -62,6 +63,9 @@ public class ChaveiroService {
 
     // Deletar chaveiro por ID
     public void deletarChaveiro(int id) {
+        if (!chaveiroRepository.existsById(id)) {
+            throw new EntityNotFoundException("Chaveiro não encontrado com ID: " + id);
+        }
         chaveiroRepository.deleteById(id);
     }
 }

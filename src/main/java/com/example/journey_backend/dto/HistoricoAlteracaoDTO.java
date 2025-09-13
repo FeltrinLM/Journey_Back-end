@@ -1,16 +1,22 @@
 package com.example.journey_backend.dto;
 
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class HistoricoAlteracaoDTO {
+
     private long id;
     private String entidade;
     private int entidadeId;
     private String campoAlterado;
     private String valorAntigo;
     private String valorNovo;
+
+    @NotNull
     private LocalDateTime dataHora;
-    private int usuarioId;
+
+    @NotNull
+    private Integer usuarioId;
 
     public long getId() {
         return id;
@@ -68,11 +74,11 @@ public class HistoricoAlteracaoDTO {
         this.dataHora = dataHora;
     }
 
-    public int getUsuarioId() {
+    public Integer getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(int usuarioId) {
+    public void setUsuarioId(Integer usuarioId) {
         this.usuarioId = usuarioId;
     }
 }

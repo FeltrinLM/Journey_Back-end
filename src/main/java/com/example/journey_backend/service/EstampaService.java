@@ -6,11 +6,11 @@ import com.example.journey_backend.model.Colecao;
 import com.example.journey_backend.model.Estampa;
 import com.example.journey_backend.repository.ColecaoRepository;
 import com.example.journey_backend.repository.EstampaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,14 +31,15 @@ public class EstampaService {
 
     // Buscar estampa por ID
     public EstampaDTO buscarPorId(int id) {
-        Optional<Estampa> estampa = estampaRepository.findById(id);
-        return estampa.map(EstampaMapper::toDTO).orElse(null);
+        Estampa estampa = estampaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Estampa não encontrada com ID: " + id));
+        return EstampaMapper.toDTO(estampa);
     }
 
     // Criar nova estampa
     public EstampaDTO criarEstampa(EstampaDTO dto) {
         Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
-                .orElseThrow(() -> new RuntimeException("Coleção não encontrada para a estampa."));
+                .orElseThrow(() -> new EntityNotFoundException("Coleção não encontrada com ID: " + dto.getColecaoId()));
 
         Estampa nova = EstampaMapper.toModel(dto, colecao);
         Estampa salva = estampaRepository.save(nova);
@@ -48,10 +49,10 @@ public class EstampaService {
     // Editar estampa existente
     public EstampaDTO editarEstampa(int id, EstampaDTO dto) {
         Estampa existente = estampaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Estampa não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Estampa não encontrada com ID: " + id));
 
         Colecao colecao = colecaoRepository.findById(dto.getColecaoId())
-                .orElseThrow(() -> new RuntimeException("Coleção não encontrada."));
+                .orElseThrow(() -> new EntityNotFoundException("Coleção não encontrada com ID: " + dto.getColecaoId()));
 
         existente.setNome(dto.getNome());
         existente.setQuantidade(dto.getQuantidade());
@@ -63,6 +64,9 @@ public class EstampaService {
 
     // Deletar estampa por ID
     public void deletarEstampa(int id) {
+        if (!estampaRepository.existsById(id)) {
+            throw new EntityNotFoundException("Estampa não encontrada com ID: " + id);
+        }
         estampaRepository.deleteById(id);
     }
 }

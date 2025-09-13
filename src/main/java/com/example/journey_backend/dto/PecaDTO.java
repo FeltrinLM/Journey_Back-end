@@ -1,11 +1,22 @@
 package com.example.journey_backend.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 public class PecaDTO {
 
     private int pecaId;
+
+    @NotBlank
     private String tipo;
+
+    @NotBlank
     private String tamanho;
+
+    @NotBlank
     private String cor;
+
+    @Min(0)
     private int quantidade;
 
     // Construtor vazio
@@ -21,7 +32,6 @@ public class PecaDTO {
     }
 
     // Getters e Setters
-
     public int getPecaId() {
         return pecaId;
     }

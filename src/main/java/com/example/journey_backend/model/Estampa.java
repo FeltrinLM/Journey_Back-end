@@ -1,22 +1,28 @@
 package com.example.journey_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity     //define a classe como uma entidade JPA.
+@Entity // Define a classe como uma entidade JPA.
 @Table(name = "estampa")
 public class Estampa {
 
-    @Id     //define a chave primária.
-    @GeneratedValue(strategy = GenerationType.IDENTITY)     //auto-incremento (estratégia do banco).
+    @Id // Define a chave primária.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremento (estratégia do banco).
     private int estampaId;
 
+    @NotBlank
     private String nome;
+
+    @Min(0)
     private int quantidade;
 
-    @ManyToOne                        //define que várias estampas pertencem a uma coleção.
-    @JoinColumn(name = "colecaoId") //indica a foreign key.
+    @ManyToOne // Várias estampas pertencem a uma coleção.
+    @JoinColumn(name = "colecaoId") // Indica a foreign key.
+    @NotNull
     private Colecao colecao;
-
 
     // Construtor vazio (obrigatório para JPA).
     public Estampa() {}
@@ -28,9 +34,7 @@ public class Estampa {
         this.colecao = colecao;
     }
 
-
     // Getters e Setters
-
     public int getEstampaId() {
         return estampaId;
     }

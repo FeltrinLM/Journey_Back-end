@@ -1,23 +1,29 @@
 package com.example.journey_backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity     //define a classe como uma entidade JPA.
+@Entity // Define a classe como uma entidade JPA.
 @Table(name = "colecao")
 public class Colecao {
 
-    @Id     //define a chave primária.
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-incremento (estratégia do banco).
+    @Id // Define a chave primária.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-incremento (estratégia do banco).
     private int colecaoId;
 
+    @NotBlank
     private String nome;
+
+    @NotNull
     private LocalDate dataInicio;
+
+    @NotNull
     private LocalDate dataFim;
 
-    //OneToMany mapeia o relacionamento 1:N com Estampa e Chaveiro
-    //cascade = ALL: garante que alterações em Colecao afetem os filhos.
+    // OneToMany mapeia o relacionamento 1:N com Estampa e Chaveiro
     @OneToMany(mappedBy = "colecao", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Estampa> estampas;
 
@@ -35,7 +41,6 @@ public class Colecao {
     }
 
     // Getters e Setters
-
     public int getColecaoId() {
         return colecaoId;
     }

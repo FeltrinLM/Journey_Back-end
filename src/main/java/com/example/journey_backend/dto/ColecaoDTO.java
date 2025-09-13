@@ -1,12 +1,20 @@
 package com.example.journey_backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class ColecaoDTO {
 
     private int colecaoId;
+
+    @NotBlank
     private String nome;
+
+    @NotNull
     private LocalDate dataInicio;
+
+    @NotNull
     private LocalDate dataFim;
 
     // Construtor vazio
@@ -21,8 +29,6 @@ public class ColecaoDTO {
     }
 
     // Getters e Setters
-
-
     public int getColecaoId() {
         return colecaoId;
     }

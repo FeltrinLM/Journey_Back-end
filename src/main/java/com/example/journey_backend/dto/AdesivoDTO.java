@@ -1,9 +1,14 @@
 package com.example.journey_backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class AdesivoDTO {
 
     private int adesivoId;
+
+    @NotBlank
     private String adesivoModelo;
+
     private boolean cromatico;
 
     public AdesivoDTO() {}

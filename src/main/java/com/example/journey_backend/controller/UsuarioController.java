@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,62 +29,43 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable int id) {
         UsuarioDTO usuario = usuarioService.buscarPorId(id);
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(usuario); // se não existir, service lança 404
     }
 
     // POST /api/usuarios
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criar(@RequestBody UsuarioDTO dto) {
-        try {
-            UsuarioDTO criado = usuarioService.criarUsuario(dto);
-            return ResponseEntity.ok(criado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
+    public ResponseEntity<UsuarioDTO> criar(@Valid @RequestBody UsuarioDTO dto) {
+        UsuarioDTO criado = usuarioService.criarUsuario(dto);
+        return ResponseEntity.created(URI.create("/api/usuarios/" + criado.getUsuarioId()))
+                .body(criado);
     }
 
     // PUT /api/usuarios/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> editar(@PathVariable int id, @RequestBody UsuarioDTO dto) {
-        try {
-            UsuarioDTO atualizado = usuarioService.editarUsuario(id, dto);
-            return ResponseEntity.ok(atualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<UsuarioDTO> editar(@PathVariable int id, @Valid @RequestBody UsuarioDTO dto) {
+        UsuarioDTO atualizado = usuarioService.editarUsuario(id, dto);
+        return ResponseEntity.ok(atualizado); // se não existir, service lança 404
     }
 
     // DELETE /api/usuarios/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable int id) {
-        try {
-            usuarioService.deletarUsuario(id);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalStateException e) {
-            // Conflito de integridade: usuário possui histórico vinculado
-            return ResponseEntity.status(409).build(); // 409 Conflict
-        }
+        usuarioService.deletarUsuario(id);
+        return ResponseEntity.noContent().build(); // se tiver histórico, service lança IllegalStateException → 409 via ControllerAdvice
     }
 
     // POST /api/usuarios/login
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestParam String nome, @RequestParam String senha) {
+    public ResponseEntity<Void> login(@RequestParam String nome, @RequestParam String senha) {
         boolean valido = usuarioService.validarLogin(nome, senha);
-        return ResponseEntity.ok(valido);
+        return valido ? ResponseEntity.ok().build() : ResponseEntity.status(401).build();
     }
 
     // GET /api/usuarios/init
     @GetMapping("/init")
     public ResponseEntity<UsuarioDTO> criarAdminInicial() {
-        try {
-            UsuarioDTO admin = usuarioService.criarAdminPadrao();
-            return ResponseEntity.ok(admin);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        UsuarioDTO admin = usuarioService.criarAdminPadrao();
+        return ResponseEntity.created(URI.create("/api/usuarios/" + admin.getUsuarioId()))
+                .body(admin);
     }
 }
