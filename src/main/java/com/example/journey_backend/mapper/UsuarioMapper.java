@@ -1,9 +1,17 @@
 package com.example.journey_backend.mapper;
 
+import com.example.journey_backend.dto.UsuarioDTO;
 import com.example.journey_backend.model.Usuario;
 import com.example.journey_backend.model.Usuario.TipoUsuario;
-import com.example.journey_backend.dto.UsuarioDTO;
 
+/**
+ * Conversões entre Model <-> DTO.
+ *
+ * Observações:
+ * - toDTO NÃO inclui senha (senha é WRITE_ONLY no DTO).
+ * - toModel apenas seta senha quando dto.getSenha() for não nula e não vazia,
+ *   evitando sobrescrever a senha existente com null ao editar.
+ */
 public class UsuarioMapper {
 
     // Model → DTO
@@ -13,7 +21,8 @@ public class UsuarioMapper {
         UsuarioDTO dto = new UsuarioDTO();
         dto.setUsuarioId(usuario.getUsuarioId());
         dto.setNome(usuario.getNome());
-        dto.setTipo(usuario.getTipo().name()); // converte enum para string
+        dto.setTipo(usuario.getTipo() == null ? null : usuario.getTipo().name());
+        // intentionally do NOT expose senha
         return dto;
     }
 
@@ -24,10 +33,41 @@ public class UsuarioMapper {
         Usuario usuario = new Usuario();
         usuario.setUsuarioId(dto.getUsuarioId());
         usuario.setNome(dto.getNome());
-        // converte string para enum (normaliza para maiúsculas para evitar IllegalArgumentException)
+
         if (dto.getTipo() != null) {
-            usuario.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
+            try {
+                usuario.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
+            } catch (IllegalArgumentException ex) {
+                // deixar a exceção subir ou tratar conforme sua política — por enquanto lança Runtime
+                throw new IllegalArgumentException("Tipo de usuário inválido: " + dto.getTipo(), ex);
+            }
         }
+
+        // Somente setar senha se for informada (evita sobrescrever com null em updates)
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            usuario.setSenha(dto.getSenha());
+        }
+
         return usuario;
+    }
+
+    /**
+     * Útil quando você quer atualizar um Usuario existente a partir de um DTO (ex: em editarUsuario).
+     * Copia apenas campos permitidos: nome, tipo e (opcionalmente) senha.
+     */
+    public static void updateModelFromDTO(UsuarioDTO dto, Usuario usuarioExistente) {
+        if (dto == null || usuarioExistente == null) return;
+
+        if (dto.getNome() != null && !dto.getNome().isBlank()) {
+            usuarioExistente.setNome(dto.getNome());
+        }
+
+        if (dto.getTipo() != null) {
+            usuarioExistente.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
+        }
+
+        if (dto.getSenha() != null && !dto.getSenha().isBlank()) {
+            usuarioExistente.setSenha(dto.getSenha());
+        }
     }
 }

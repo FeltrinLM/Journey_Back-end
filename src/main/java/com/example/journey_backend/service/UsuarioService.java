@@ -161,7 +161,7 @@ public class UsuarioService {
 
         Usuario admin = new Usuario();
         admin.setNome("admin");
-        admin.setSenha("admin"); // ⚠️ em produção, aplicar hash seguro
+        admin.setSenha("administrador"); // ⚠️ em produção, aplicar hash seguro
         admin.setTipo(TipoUsuario.ADMINISTRADOR);
 
         Usuario salvo = usuarioRepository.save(admin);

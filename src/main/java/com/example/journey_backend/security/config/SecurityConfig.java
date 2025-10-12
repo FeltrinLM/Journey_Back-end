@@ -52,6 +52,33 @@ public class SecurityConfig {
      * - Adiciona o filtro de autenticação JWT
      * - Define política de sessão stateless
      */
+
+    // Excluir essa parte do codigo assim que eu testar todos os endpoints
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                // Desativa a proteção CSRF
+                .csrf(csrf -> csrf.disable())
+
+                // Mantém o tratamento de exceção (para ver o 401 customizado, se fosse o caso)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(unauthorizedHandler))
+
+                // Define política de sessão stateless
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // !!! MUDANÇA AQUI: PERMITE QUALQUER REQUISIÇÃO (anyRequest().permitAll()) !!!
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()); // TUDO LIBERADO PARA TESTE
+
+        // O filtro JWT pode ser mantido, mas será ignorado pelo .permitAll()
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    /*
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -70,4 +97,6 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+     */
 }
