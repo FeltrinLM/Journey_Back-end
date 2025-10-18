@@ -9,6 +9,7 @@ import com.example.journey_backend.repository.UsuarioRepository;
 import com.example.journey_backend.repository.HistoricoAlteracaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder; // NOVO IMPORT
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class UsuarioService {
     @Autowired
     private HistoricoAlteracaoRepository historicoRepository;
 
+    @Autowired // INJEÇÃO DO PASSWORD ENCODER
+    private PasswordEncoder passwordEncoder;
+
     // Listar todos os usuários
     public List<UsuarioDTO> listarUsuarios() {
         return usuarioRepository.findAll().stream()
@@ -40,24 +44,36 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(usuario);
     }
 
-    // Criar novo usuário
+    // Criar novo usuário (CORRIGIDO: Aplica Criptografia)
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO dto) {
         if (usuarioRepository.existsByNome(dto.getNome())) {
             throw new IllegalArgumentException("Usuário com esse nome já existe.");
         }
+
         Usuario novoUsuario = UsuarioMapper.toModel(dto);
+
+        // Criptografa e define o hash na Entidade antes de salvar
+        String senhaHash = passwordEncoder.encode(dto.getSenha());
+        novoUsuario.setSenha(senhaHash);
+
         Usuario salvo = usuarioRepository.save(novoUsuario);
         return UsuarioMapper.toDTO(salvo);
     }
 
-    // Criar novo usuário (com autor para registrar histórico)
+    // Criar novo usuário (com autor para registrar histórico) (CORRIGIDO: Aplica Criptografia)
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO dto, Usuario autor) {
         if (usuarioRepository.existsByNome(dto.getNome())) {
             throw new IllegalArgumentException("Usuário com esse nome já existe.");
         }
+
         Usuario novoUsuario = UsuarioMapper.toModel(dto);
+
+        // Criptografa e define o hash na Entidade antes de salvar
+        String senhaHash = passwordEncoder.encode(dto.getSenha());
+        novoUsuario.setSenha(senhaHash);
+
         Usuario salvo = usuarioRepository.save(novoUsuario);
 
         logAlteracao(autor,
@@ -68,7 +84,7 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(salvo);
     }
 
-    // Editar usuário existente
+    // Editar usuário existente (MANTÉM: Assume que a senha é atualizada em outra rota, mas protege o DTO)
     @Transactional
     public UsuarioDTO editarUsuario(int id, UsuarioDTO dto) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
@@ -76,6 +92,9 @@ public class UsuarioService {
 
         usuarioExistente.setNome(dto.getNome());
         usuarioExistente.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
+
+        // NOTA: A senha NÃO deve ser atualizada aqui, a menos que o DTO contenha o campo.
+        // Se o DTO tem a senha, mas não deve alterá-la, o Mapper deve ignorá-la.
 
         Usuario atualizado = usuarioRepository.save(usuarioExistente);
         return UsuarioMapper.toDTO(atualizado);
@@ -140,10 +159,11 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    // Validação de login
+    // Validação de login (CORRIGIDO: Usa PasswordEncoder para verificar o hash)
     public boolean validarLogin(String nome, String senha) {
+        // Usa o hash salvo no banco e o compara com a senha pura fornecida pelo usuário
         return usuarioRepository.findByNome(nome)
-                .map(usuario -> usuario.getSenha().equals(senha))
+                .map(usuario -> passwordEncoder.matches(senha, usuario.getSenha()))
                 .orElse(false);
     }
 
@@ -152,7 +172,7 @@ public class UsuarioService {
         return usuarioRepository.count() == 0;
     }
 
-    // Criar usuário administrador padrão
+    // Criar usuário administrador padrão (CORRIGIDO: Aplica Criptografia e Senha > 8 chars)
     @Transactional
     public UsuarioDTO criarAdminPadrao() {
         if (!sistemaSemUsuarios()) {
@@ -160,8 +180,15 @@ public class UsuarioService {
         }
 
         Usuario admin = new Usuario();
-        admin.setNome("admin");
-        admin.setSenha("admin"); // ⚠️ em produção, aplicar hash seguro
+        admin.setNome("admin_master");
+
+        // 1. Define uma senha que passe na validação @Size(min=8)
+        String senhaPadrao = "admin12345";
+
+        // 2. Aplica o hash seguro
+        String senhaHash = passwordEncoder.encode(senhaPadrao);
+
+        admin.setSenha(senhaHash);
         admin.setTipo(TipoUsuario.ADMINISTRADOR);
 
         Usuario salvo = usuarioRepository.save(admin);
