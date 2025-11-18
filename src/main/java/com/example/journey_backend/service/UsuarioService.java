@@ -1,19 +1,18 @@
 package com.example.journey_backend.service;
 
+import com.example.journey_backend.dto.HistoricoAlteracaoDTO;
 import com.example.journey_backend.dto.UsuarioDTO;
 import com.example.journey_backend.mapper.UsuarioMapper;
 import com.example.journey_backend.model.Usuario;
 import com.example.journey_backend.model.Usuario.TipoUsuario;
-import com.example.journey_backend.model.HistoricoAlteracao;
+import com.example.journey_backend.repository.HistoricoAlteracaoRepository; // RE-IMPORTADO
 import com.example.journey_backend.repository.UsuarioRepository;
-import com.example.journey_backend.repository.HistoricoAlteracaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder; // NOVO IMPORT
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,58 +24,54 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private HistoricoAlteracaoService historicoService; // Injetado (Correto)
+
+    // RE-INJETADO para a regra de deleção
+    @Autowired
     private HistoricoAlteracaoRepository historicoRepository;
 
-    @Autowired // INJEÇÃO DO PASSWORD ENCODER
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Listar todos os usuários
+    // --- CORREÇÃO: CORPO DO MÉTODO RESTAURADO ---
     public List<UsuarioDTO> listarUsuarios() {
         return usuarioRepository.findAll().stream()
                 .map(UsuarioMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    // Buscar usuário por ID
+    // --- CORREÇÃO: CORPO DO MÉTODO RESTAURADO ---
     public UsuarioDTO buscarPorId(int id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
         return UsuarioMapper.toDTO(usuario);
     }
 
-    // Criar novo usuário (CORRIGIDO: Aplica Criptografia)
+    // --- CORREÇÃO: CORPO DO MÉTODO RESTAURADO ---
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO dto) {
         if (usuarioRepository.existsByNome(dto.getNome())) {
             throw new IllegalArgumentException("Usuário com esse nome já existe.");
         }
-
         Usuario novoUsuario = UsuarioMapper.toModel(dto);
-
-        // Criptografa e define o hash na Entidade antes de salvar
         String senhaHash = passwordEncoder.encode(dto.getSenha());
         novoUsuario.setSenha(senhaHash);
-
         Usuario salvo = usuarioRepository.save(novoUsuario);
         return UsuarioMapper.toDTO(salvo);
     }
 
-    // Criar novo usuário (com autor para registrar histórico) (CORRIGIDO: Aplica Criptografia)
+    // Criar novo usuário (com autor)
     @Transactional
     public UsuarioDTO criarUsuario(UsuarioDTO dto, Usuario autor) {
         if (usuarioRepository.existsByNome(dto.getNome())) {
             throw new IllegalArgumentException("Usuário com esse nome já existe.");
         }
-
         Usuario novoUsuario = UsuarioMapper.toModel(dto);
-
-        // Criptografa e define o hash na Entidade antes de salvar
         String senhaHash = passwordEncoder.encode(dto.getSenha());
         novoUsuario.setSenha(senhaHash);
-
         Usuario salvo = usuarioRepository.save(novoUsuario);
 
-        logAlteracao(autor,
+        logAlteracao(autor.getUsuarioId(),
                 "Usuario", salvo.getUsuarioId(),
                 "__CREATE__", null,
                 "nome=" + salvo.getNome() + "; tipo=" + salvo.getTipo());
@@ -84,7 +79,7 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(salvo);
     }
 
-    // Editar usuário existente (MANTÉM: Assume que a senha é atualizada em outra rota, mas protege o DTO)
+    // --- CORREÇÃO: CORPO DO MÉTODO RESTAURADO ---
     @Transactional
     public UsuarioDTO editarUsuario(int id, UsuarioDTO dto) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
@@ -93,14 +88,11 @@ public class UsuarioService {
         usuarioExistente.setNome(dto.getNome());
         usuarioExistente.setTipo(TipoUsuario.valueOf(dto.getTipo().toUpperCase()));
 
-        // NOTA: A senha NÃO deve ser atualizada aqui, a menos que o DTO contenha o campo.
-        // Se o DTO tem a senha, mas não deve alterá-la, o Mapper deve ignorá-la.
-
         Usuario atualizado = usuarioRepository.save(usuarioExistente);
         return UsuarioMapper.toDTO(atualizado);
     }
 
-    // Editar usuário existente (com autor para registrar histórico)
+    // Editar usuário existente (com autor)
     @Transactional
     public UsuarioDTO editarUsuario(int id, UsuarioDTO dto, Usuario autor) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
@@ -116,11 +108,11 @@ public class UsuarioService {
 
         if (autor != null) {
             if (!nomeAntigo.equals(atualizado.getNome())) {
-                logAlteracao(autor, "Usuario", atualizado.getUsuarioId(),
+                logAlteracao(autor.getUsuarioId(), "Usuario", atualizado.getUsuarioId(),
                         "nome", nomeAntigo, atualizado.getNome());
             }
             if (!tipoAntigo.equals(atualizado.getTipo())) {
-                logAlteracao(autor, "Usuario", atualizado.getUsuarioId(),
+                logAlteracao(autor.getUsuarioId(), "Usuario", atualizado.getUsuarioId(),
                         "tipo",
                         tipoAntigo == null ? null : tipoAntigo.name(),
                         atualizado.getTipo() == null ? null : atualizado.getTipo().name());
@@ -133,6 +125,7 @@ public class UsuarioService {
     // Deletar usuário por ID
     @Transactional
     public void deletarUsuario(int id) {
+        // --- CORREÇÃO: REGRA DE NEGÓCIO RESTAURADA ---
         if (historicoRepository.existsByUsuarioUsuarioId(id)) {
             throw new IllegalStateException("Não é possível deletar um usuário que possui histórico de alterações.");
         }
@@ -142,58 +135,53 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    // Deletar usuário por ID (com autor para registrar histórico)
+
+    // Deletar usuário por ID (com autor)
     @Transactional
     public void deletarUsuario(int id, Usuario autor) {
         Usuario alvo = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
 
+        // --- CORREÇÃO: REGRA DE NEGÓCIO RESTAURADA ---
         if (historicoRepository.existsByUsuarioUsuarioId(id)) {
             throw new IllegalStateException("Não é possível deletar um usuário que possui histórico de alterações.");
         }
 
-        logAlteracao(autor,
+        logAlteracao(autor.getUsuarioId(),
                 "Usuario", alvo.getUsuarioId(),
                 "__DELETE__", "nome=" + alvo.getNome() + "; tipo=" + alvo.getTipo(), null);
 
         usuarioRepository.deleteById(id);
     }
 
-    // Validação de login (CORRIGIDO: Usa PasswordEncoder para verificar o hash)
+    // --- CORREÇÃO: CORPO DO MÉTODO RESTAURADO ---
     public boolean validarLogin(String nome, String senha) {
-        // Usa o hash salvo no banco e o compara com a senha pura fornecida pelo usuário
         return usuarioRepository.findByNome(nome)
                 .map(usuario -> passwordEncoder.matches(senha, usuario.getSenha()))
                 .orElse(false);
     }
 
-    // Verificar se não há nenhum usuário no sistema
+    // --- CORREÇÃO: CORPO DO MÉTODO RESTAURADO ---
     public boolean sistemaSemUsuarios() {
         return usuarioRepository.count() == 0;
     }
 
-    // Criar usuário administrador padrão (CORRIGIDO: Aplica Criptografia e Senha > 8 chars)
+
+    // Criar usuário administrador padrão
     @Transactional
     public UsuarioDTO criarAdminPadrao() {
         if (!sistemaSemUsuarios()) {
             throw new IllegalStateException("Já existem usuários no sistema.");
         }
-
         Usuario admin = new Usuario();
         admin.setNome("admin_master");
-
-        // 1. Define uma senha que passe na validação @Size(min=8)
         String senhaPadrao = "admin12345";
-
-        // 2. Aplica o hash seguro
         String senhaHash = passwordEncoder.encode(senhaPadrao);
-
         admin.setSenha(senhaHash);
         admin.setTipo(TipoUsuario.ADMINISTRADOR);
-
         Usuario salvo = usuarioRepository.save(admin);
 
-        logAlteracao(salvo,
+        logAlteracao(salvo.getUsuarioId(), // Admin loga sua própria criação
                 "Usuario", salvo.getUsuarioId(),
                 "__CREATE_ADMIN__", null,
                 "nome=" + salvo.getNome() + "; tipo=" + salvo.getTipo());
@@ -201,24 +189,23 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(salvo);
     }
 
-    // ================== Helpers de histórico ==================
-    private void logAlteracao(Usuario autor,
+    // ================== Helpers de histórico (ATUALIZADO) ==================
+    private void logAlteracao(Integer autorId,
                               String entidade,
                               int entidadeId,
                               String campoAlterado,
                               String valorAntigo,
                               String valorNovo) {
-        if (autor == null) return;
+        if (autorId == null) return;
 
-        HistoricoAlteracao h = new HistoricoAlteracao();
-        h.setEntidade(entidade);
-        h.setEntidadeId(entidadeId);
-        h.setCampoAlterado(campoAlterado);
-        h.setValorAntigo(valorAntigo);
-        h.setValorNovo(valorNovo);
-        h.setDataHora(LocalDateTime.now());
-        h.setUsuario(autor);
+        HistoricoAlteracaoDTO dto = new HistoricoAlteracaoDTO();
+        dto.setEntidade(entidade);
+        dto.setEntidadeId(entidadeId);
+        dto.setCampoAlterado(campoAlterado);
+        dto.setValorAntigo(valorAntigo);
+        dto.setValorNovo(valorNovo);
+        dto.setUsuarioId(autorId);
 
-        historicoRepository.save(h);
+        historicoService.registrarAlteracao(dto);
     }
 }
