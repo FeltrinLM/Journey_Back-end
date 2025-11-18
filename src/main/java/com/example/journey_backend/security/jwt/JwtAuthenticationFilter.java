@@ -1,6 +1,7 @@
 package com.example.journey_backend.security.jwt;
 
-import com.example.journey_backend.security.jwt.JwtUserDetailsService;
+import io.jsonwebtoken.ExpiredJwtException; // Importe
+import io.jsonwebtoken.JwtException; // Importe genérico
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,21 +31,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 1. Pega o token do cabeçalho
         String header = request.getHeader("Authorization");
-
         String token = null;
         String username = null;
 
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
-            username = tokenProvider.getUsernameFromToken(token);
+
+            // --- CORREÇÃO AQUI ---
+            // Colocamos a extração do username dentro de um try...catch
+            // Se o token estiver expirado ou malformado, ele apenas será ignorado
+            try {
+                username = tokenProvider.getUsernameFromToken(token);
+            } catch (ExpiredJwtException e) {
+                logger.warn("Token JWT expirado: " + e.getMessage());
+            } catch (JwtException e) {
+                logger.warn("Erro ao parsear JWT: " + e.getMessage());
+            }
+            // --- FIM DA CORREÇÃO ---
         }
 
         // 2. Se tiver username e o contexto não estiver autenticado, continue
+        // (Esta lógica agora só roda se o 'username' foi extraído com sucesso)
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
+            // A validação aqui é uma segunda garantia, mas a extração do username já é uma boa validação
             if (tokenProvider.validateToken(token)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
