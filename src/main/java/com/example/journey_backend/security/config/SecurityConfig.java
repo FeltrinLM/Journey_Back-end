@@ -54,24 +54,32 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. Permite os endpoints públicos de login e criação do admin
+                        // 1. Libera endpoints públicos de negócio
                         .requestMatchers("/api/usuarios/login", "/api/usuarios/init").permitAll()
-                        // 2. Protege todo o resto da API
-                        .anyRequest().authenticated()); // <-- MUDANÇA CRÍTICA
 
-        // 3. RE-ABILITA O FILTRO JWT!
-        // (Isso fará o Spring ler o "Bearer Token" nas requisições protegidas)
+                        // 2. Libera o endpoint de ERRO do Spring Boot
+                        // (Essencial para que erros 500 não virem 401)
+                        .requestMatchers("/error").permitAll()
+
+                        // 3. Libera o "Pre-flight" do CORS (requisições OPTIONS)
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // 4. Libera o Swagger (Opcional, mas útil se usar a UI)
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                        // 5. Todo o resto precisa de autenticação
+                        .anyRequest().authenticated());
+
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // (O seu bean CorsConfigurationSource continua o mesmo, está correto)
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Permite requisições do seu Angular
+        // Permite requisições do seu Angular (ajuste se a porta mudar)
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
 
         // Métodos permitidos
@@ -80,19 +88,19 @@ public class SecurityConfig {
         // Headers permitidos
         configuration.setAllowedHeaders(Arrays.asList("*"));
 
-        // Permite credenciais
+        // Permite credenciais (cookies/auth headers)
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Aplica esta configuração a TODAS as rotas (/**)
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(jwtUserDetailsService); // seu UserDetailsService
-        provider.setPasswordEncoder(passwordEncoder()); // BCryptPasswordEncoder bean
+        provider.setUserDetailsService(jwtUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 }

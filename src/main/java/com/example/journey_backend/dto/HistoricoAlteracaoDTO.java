@@ -1,5 +1,6 @@
 package com.example.journey_backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat; // <--- IMPORTANTE
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -12,7 +13,9 @@ public class HistoricoAlteracaoDTO {
     private String valorAntigo;
     private String valorNovo;
 
+    // A correção principal está aqui: definimos o formato exato da data para o JSON
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataHora;
 
     @NotNull

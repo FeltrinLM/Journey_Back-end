@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/historico")
-@CrossOrigin(origins = "*") // mantém consistente com UsuarioController
 @Tag(name = "Histórico de Alterações", description = "Endpoints de leitura para o registro de alterações do sistema")
 public class HistoricoAlteracaoController {
 
@@ -41,6 +40,6 @@ public class HistoricoAlteracaoController {
     @ApiResponse(responseCode = "404", description = "Registro de histórico não encontrado")
     public ResponseEntity<HistoricoAlteracaoDTO> getById(@PathVariable Long id) {
         HistoricoAlteracaoDTO dto = historicoService.buscarPorId(id);
-        return ResponseEntity.ok(dto); // se não existir, service lança 404
+        return ResponseEntity.ok(dto);
     }
 }
