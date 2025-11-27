@@ -1,24 +1,37 @@
 package com.example.journey_backend.controller;
 
+// 1. Imports do Projeto
 import com.example.journey_backend.dto.EstampaDTO;
-import com.example.journey_backend.model.Usuario; // Importado
-import com.example.journey_backend.repository.UsuarioRepository; // Importado
+import com.example.journey_backend.model.Usuario;
+import com.example.journey_backend.repository.UsuarioRepository;
 import com.example.journey_backend.service.EstampaService;
 
-// Importações do Swagger/OpenAPI
+// 2. Imports do Swagger/OpenAPI
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import jakarta.persistence.EntityNotFoundException; // Importado
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus; // Importado
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+// 3. Imports do Jakarta
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+
+// 4. Imports do Spring Framework
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+// Imports explícitos das anotações Web
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+// 5. Imports do Java Padrão
 import java.net.URI;
-import java.security.Principal; // Importado
+import java.security.Principal;
 import java.util.List;
 
 @RestController

@@ -1,11 +1,17 @@
 package com.example.journey_backend.security.jwt;
 
-import io.jsonwebtoken.*;
+// 1. Imports da Biblioteca JJWT (JSON Web Token)
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+// 2. Imports do Spring Framework
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+// 3. Imports do Java Padrão
 import javax.crypto.SecretKey;
 import java.util.Date;
 

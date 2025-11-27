@@ -1,17 +1,24 @@
 package com.example.journey_backend.controller;
 
+// 1. Imports do Projeto
 import com.example.journey_backend.dto.HistoricoAlteracaoDTO;
 import com.example.journey_backend.service.HistoricoAlteracaoService;
 
-// Importações do Swagger/OpenAPI
+// 2. Imports do Swagger/OpenAPI
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+// 3. Imports do Spring Framework
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+// Imports explícitos das anotações Web
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+// 4. Imports do Java Padrão
 import java.util.List;
 
 @RestController

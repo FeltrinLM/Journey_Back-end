@@ -1,6 +1,13 @@
 package com.example.journey_backend.model;
 
-import jakarta.persistence.*;
+// 1. Imports do Jakarta Persistence (JPA)
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+// 2. Imports do Jakarta Validation
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
