@@ -11,7 +11,9 @@ public class AdesivoDTO {
 
     private boolean cromatico;
 
-    public AdesivoDTO() {}
+    public AdesivoDTO() {
+        // Construtor intencionalmente vazio
+    }
 
     public AdesivoDTO(int adesivoId, String adesivoModelo, boolean cromatico) {
         this.adesivoId = adesivoId;

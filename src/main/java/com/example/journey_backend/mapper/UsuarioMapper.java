@@ -12,11 +12,20 @@ import com.example.journey_backend.model.Usuario.TipoUsuario;
  * - toModel apenas seta senha quando dto.getSenha() for não nula e não vazia,
  *   evitando sobrescrever a senha existente com null ao editar.
  */
-public class UsuarioMapper {
+public final class UsuarioMapper {
+
+    /**
+     * Construtor privado para impedir a instanciação desta classe utilitária.
+     */
+    private UsuarioMapper() {
+        // Construtor intencionalmente vazio e privado
+    }
 
     // Model → DTO
     public static UsuarioDTO toDTO(Usuario usuario) {
-        if (usuario == null) return null;
+        if (usuario == null){
+            return null;
+        }
 
         UsuarioDTO dto = new UsuarioDTO();
         dto.setUsuarioId(usuario.getUsuarioId());
@@ -28,7 +37,9 @@ public class UsuarioMapper {
 
     // DTO → Model
     public static Usuario toModel(UsuarioDTO dto) {
-        if (dto == null) return null;
+        if (dto == null){
+            return null;
+        }
 
         Usuario usuario = new Usuario();
         usuario.setUsuarioId(dto.getUsuarioId());
@@ -56,7 +67,9 @@ public class UsuarioMapper {
      * Copia apenas campos permitidos: nome, tipo e (opcionalmente) senha.
      */
     public static void updateModelFromDTO(UsuarioDTO dto, Usuario usuarioExistente) {
-        if (dto == null || usuarioExistente == null) return;
+        if (dto == null || usuarioExistente == null){
+            return;
+        }
 
         if (dto.getNome() != null && !dto.getNome().isBlank()) {
             usuarioExistente.setNome(dto.getNome());

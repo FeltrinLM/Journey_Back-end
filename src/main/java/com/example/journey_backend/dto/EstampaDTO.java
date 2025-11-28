@@ -18,7 +18,9 @@ public class EstampaDTO {
     private Integer colecaoId;
 
     // Construtor vazio
-    public EstampaDTO() {}
+    public EstampaDTO() {
+        // Construtor intencionalmente vazio
+    }
 
     // Construtor com parâmetros
     public EstampaDTO(int estampaId, String nome, int quantidade, Integer colecaoId) {

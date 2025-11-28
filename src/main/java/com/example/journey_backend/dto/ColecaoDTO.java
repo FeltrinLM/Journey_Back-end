@@ -18,7 +18,9 @@ public class ColecaoDTO {
     private LocalDate dataFim;
 
     // Construtor vazio
-    public ColecaoDTO() {}
+    public ColecaoDTO() {
+        // Construtor intencionalmente vazio
+    }
 
     // Construtor com parâmetros
     public ColecaoDTO(int colecaoId, String nome, LocalDate dataInicio, LocalDate dataFim) {

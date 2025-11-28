@@ -4,11 +4,20 @@ import com.example.journey_backend.dto.ChaveiroDTO;
 import com.example.journey_backend.model.Chaveiro;
 import com.example.journey_backend.model.Colecao;
 
-public class ChaveiroMapper {
+public final class ChaveiroMapper {
+
+    /**
+     * Construtor privado para impedir a instanciação desta classe utilitária.
+     */
+    private ChaveiroMapper() {
+        // Construtor intencionalmente vazio e privado
+    }
 
     // Model → DTO
     public static ChaveiroDTO toDTO(Chaveiro chaveiro) {
-        if (chaveiro == null) return null;
+        if (chaveiro == null) {
+            return null;
+        }
 
         ChaveiroDTO dto = new ChaveiroDTO();
         dto.setChaveiroId(chaveiro.getChaveiroId());
@@ -22,7 +31,9 @@ public class ChaveiroMapper {
 
     // DTO → Model (precisa da instância de Colecao!)
     public static Chaveiro toModel(ChaveiroDTO dto, Colecao colecao) {
-        if (dto == null) return null;
+        if (dto == null){
+            return null;
+        }
 
         Chaveiro chaveiro = new Chaveiro();
         chaveiro.setChaveiroId(dto.getChaveiroId());

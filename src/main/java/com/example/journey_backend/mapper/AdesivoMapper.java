@@ -3,11 +3,21 @@ package com.example.journey_backend.mapper;
 import com.example.journey_backend.dto.AdesivoDTO;
 import com.example.journey_backend.model.Adesivo;
 
-public class AdesivoMapper {
+// ADICIONADO "final" AQUI V
+public final class AdesivoMapper {
+
+    /**
+     * Construtor privado para impedir a instanciação desta classe utilitária.
+     */
+    private AdesivoMapper() {
+        // Construtor intencionalmente vazio e privado
+    }
 
     // Model → DTO
     public static AdesivoDTO toDTO(Adesivo adesivo) {
-        if (adesivo == null) return null;
+        if (adesivo == null){
+            return null;
+        }
 
         AdesivoDTO dto = new AdesivoDTO();
         dto.setAdesivoId(adesivo.getAdesivoId());
@@ -18,7 +28,9 @@ public class AdesivoMapper {
 
     // DTO → Model
     public static Adesivo toModel(AdesivoDTO dto) {
-        if (dto == null) return null;
+        if (dto == null) {
+            return null;
+        }
 
         Adesivo adesivo = new Adesivo();
         adesivo.setAdesivoId(dto.getAdesivoId());

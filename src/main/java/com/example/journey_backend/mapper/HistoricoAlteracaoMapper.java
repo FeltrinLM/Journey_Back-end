@@ -4,7 +4,14 @@ import com.example.journey_backend.dto.HistoricoAlteracaoDTO;
 import com.example.journey_backend.model.HistoricoAlteracao;
 import com.example.journey_backend.model.Usuario;
 
-public class HistoricoAlteracaoMapper {
+public final class HistoricoAlteracaoMapper {
+
+    /**
+     * Construtor privado para impedir a instanciação desta classe utilitária.
+     */
+    private HistoricoAlteracaoMapper() {
+        // Construtor intencionalmente vazio e privado
+    }
 
     // Converte Model → DTO
     public static HistoricoAlteracaoDTO toDTO(HistoricoAlteracao model) {

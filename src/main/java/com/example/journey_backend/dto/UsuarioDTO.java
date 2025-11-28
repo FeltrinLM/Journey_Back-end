@@ -18,7 +18,9 @@ public class UsuarioDTO {
     @NotNull
     private String tipo;
 
-    public UsuarioDTO() {}
+    public UsuarioDTO() {
+        // Construtor intencionalmente vazio
+    }
 
     // CONSTRUTOR ATUALIZADO
     public UsuarioDTO(int usuarioId, String nome, String senha, String tipo) {

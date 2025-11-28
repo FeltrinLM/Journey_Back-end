@@ -3,11 +3,20 @@ package com.example.journey_backend.mapper;
 import com.example.journey_backend.dto.ColecaoDTO;
 import com.example.journey_backend.model.Colecao;
 
-public class ColecaoMapper {
+public final class ColecaoMapper {
+
+    /**
+     * Construtor privado para impedir a instanciação desta classe utilitária.
+     */
+    private ColecaoMapper() {
+        // Construtor intencionalmente vazio e privado
+    }
 
     // Model → DTO
     public static ColecaoDTO toDTO(Colecao colecao) {
-        if (colecao == null) return null;
+        if (colecao == null){
+            return null;
+        }
 
         ColecaoDTO dto = new ColecaoDTO();
         dto.setColecaoId(colecao.getColecaoId());
@@ -20,7 +29,9 @@ public class ColecaoMapper {
 
     // DTO → Model
     public static Colecao toModel(ColecaoDTO dto) {
-        if (dto == null) return null;
+        if (dto == null) {
+            return null;
+        }
 
         Colecao colecao = new Colecao();
         colecao.setColecaoId(dto.getColecaoId());

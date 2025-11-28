@@ -14,7 +14,9 @@ public class ChaveiroDTO {
     private Integer colecaoId;
 
     // Construtor vazio
-    public ChaveiroDTO() {}
+    public ChaveiroDTO() {
+        // Construtor intencionalmente vazio
+    }
 
     // Construtor com parâmetros
     public ChaveiroDTO(int chaveiroId, String chaveiroModelo, Integer colecaoId) {

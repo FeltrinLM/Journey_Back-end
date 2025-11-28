@@ -20,7 +20,9 @@ public class PecaDTO {
     private int quantidade;
 
     // Construtor vazio
-    public PecaDTO() {}
+    public PecaDTO() {
+        // Construtor intencionalmente vazio
+    }
 
     // Construtor com parâmetros
     public PecaDTO(int pecaId, String tipo, String tamanho, String cor, int quantidade) {
