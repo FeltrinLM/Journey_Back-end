@@ -55,8 +55,9 @@ public class Usuario {
     @JsonIgnore // Evita loop infinito na serialização JSON.
     private List<HistoricoAlteracao> historicos = new ArrayList<>();
 
-    // Construtor padrão (obrigatório para JPA).
-    public Usuario() {}
+    public Usuario() {
+        // Construtor vazio (obrigatório para JPA).
+    }
 
     // Construtor com parâmetros.
     public Usuario(String nome, String senha, TipoUsuario tipo) {

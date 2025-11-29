@@ -41,8 +41,9 @@ public class Colecao {
     @OneToMany(mappedBy = "colecao", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chaveiro> chaveiros;
 
-    // Construtor vazio (obrigatório para JPA).
-    public Colecao() {}
+    public Colecao() {
+        // Construtor vazio (obrigatório para JPA).
+    }
 
     // Construtor com parâmetros.
     public Colecao(String nome, LocalDate dataInicio, LocalDate dataFim) {

@@ -33,8 +33,9 @@ public class Estampa {
     @NotNull
     private Colecao colecao;
 
-    // Construtor vazio (obrigatório para JPA).
-    public Estampa() {}
+    public Estampa() {
+        // Construtor vazio (obrigatório para JPA).
+    }
 
     // Construtor com parâmetros.
     public Estampa(String nome, int quantidade, Colecao colecao) {

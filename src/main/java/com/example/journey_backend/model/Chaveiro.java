@@ -29,8 +29,9 @@ public class Chaveiro {
     @NotNull
     private Colecao colecao;
 
-    // Construtor vazio (obrigatório para JPA).
-    public Chaveiro() {}
+    public Chaveiro() {
+        // Construtor vazio (obrigatório para JPA).
+    }
 
     // Construtor com parâmetros.
     public Chaveiro(String chaveiroModelo, Colecao colecao) {

@@ -31,8 +31,9 @@ public class Peca {
     @Min(0)
     private int quantidade;
 
-    // Construtor vazio (obrigatório para JPA).
-    public Peca() {}
+    public Peca() {
+        // Construtor vazio (obrigatório para JPA).
+    }
 
     // Construtor com parâmetros.
     public Peca(String tipo, String tamanho, String cor, int quantidade) {

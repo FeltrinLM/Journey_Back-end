@@ -23,8 +23,10 @@ public class Adesivo {
 
     private boolean cromatico;
 
-    // Construtor vazio (obrigatório para JPA).
-    public Adesivo() {}
+    public Adesivo() {
+        // Construtor vazio (obrigatório para JPA).
+    }
+
 
     // Construtor com parâmetros.
     public Adesivo(String adesivoModelo, boolean cromatico) {

@@ -195,7 +195,9 @@ public class UsuarioService {
                               String campoAlterado,
                               String valorAntigo,
                               String valorNovo) {
-        if (autorId == null) return;
+        if (autorId == null) {
+            return;
+        }
 
         HistoricoAlteracaoDTO dto = new HistoricoAlteracaoDTO();
         dto.setEntidade(entidade);

@@ -8,6 +8,7 @@ class JourneyBackEndApplicationTests {
 
     @Test
     void contextLoads() {
+        // Método vazio intencionalmente para verificar se o contexto do Spring carrega sem erros
     }
 
 }

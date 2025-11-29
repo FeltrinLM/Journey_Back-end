@@ -41,9 +41,6 @@ public class HistoricoAlteracao {
     @NotNull
     private Usuario usuario;  // Usuário que realizou a alteração.
 
-    // Construtor padrão (obrigatório para JPA).
-    public HistoricoAlteracao() {}
-
     // Getters e Setters
     public Long getId() {
         return id;
