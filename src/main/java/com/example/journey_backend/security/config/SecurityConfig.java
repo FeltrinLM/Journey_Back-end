@@ -54,17 +54,16 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 1. Libera endpoints públicos de negócio
-                        .requestMatchers("/api/usuarios/login", "/api/usuarios/init").permitAll()
+                        // 1. Libera endpoints públicos de autenticação
+                        .requestMatchers("/api/usuarios/login", "/api/usuarios/init", "/auth/**").permitAll()
 
                         // 2. Libera o endpoint de ERRO do Spring Boot
-                        // (Essencial para que erros 500 não virem 401)
                         .requestMatchers("/error").permitAll()
 
-                        // 3. Libera o "Pre-flight" do CORS (requisições OPTIONS)
+                        // 3. Libera o "Pre-flight" do CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // 4. Libera o Swagger (Opcional, mas útil se usar a UI)
+                        // 4. Libera o Swagger (UI e Docs)
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                         // 5. Todo o resto precisa de autenticação
@@ -79,16 +78,21 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Permite requisições do seu Angular (ajuste se a porta mudar)
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        // ATENÇÃO: Adicionei localhost (para Docker na porta 80) e 127.0.0.1
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200", // Angular local
+                "http://localhost:80",   // Angular no Docker (opcional, pois porta 80 é padrão)
+                "http://localhost",      // Angular no Docker (padrão)
+                "http://127.0.0.1"       // Alternativa segura
+        ));
 
         // Métodos permitidos
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
         // Headers permitidos
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 
-        // Permite credenciais (cookies/auth headers)
+        // Permite credenciais
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
