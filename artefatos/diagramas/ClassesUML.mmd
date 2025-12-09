@@ -133,57 +133,71 @@ classDiagram
     Colecao "1" --> "n" Chaveiro : contem
     Usuario --> TipoUsuario : tipo
     Usuario "1" --> "n" HistoricoAlteracao : realiza
+    HistoricoAlteracao "n" ..> "1" Peca : registra alterações em
+    HistoricoAlteracao "n" ..> "1" Colecao : registra alterações em
+    HistoricoAlteracao "n" ..> "1" Estampa : registra alterações em
+    HistoricoAlteracao "n" ..> "1" Adesivo : registra alterações em
+    HistoricoAlteracao "n" ..> "1" Chaveiro : registra alterações em
 
-%%Repositorys
+%% Repositories
 
     class ColecaoRepository {
         <<interface>>
-        + save(Colecao): Colecao
-        + findAll(): List<Colecao>
-        + findById(int): Optional<Colecao>
-        + deleteById(int): void
+        +Optional<Colecao> findByNome(String nome)
+        +Optional<Colecao> findById(int id)
+        +List<Colecao> findAll()
+        +Colecao save(Colecao colecao)
+        +void deleteById(int id)
     }
 
     class EstampaRepository {
         <<interface>>
-        +findAll(): List<Estampa>
-        +findById(int): Optional<Estampa>
-        +save(Estampa): Estampa
-        +deleteById(int): void
+        +Optional<Estampa> findById(int id)
+        +List<Estampa> findByNome(String nome)
+        +List<Estampa> findAll()
+        +Estampa save(Estampa estampa)
+        +void deleteById(int id)
     }
 
     class PecaRepository {
         <<interface>>
-        +findAll(): List<Peca>
-        +findById(int): Optional<Peca>
-        +save(Peca): Peca
-        +deleteById(int): void
+        +Optional<Peca> findById(int id)
+        +List<Peca> findByTipo(String tipo)
+        +List<Peca> findByTamanho(String tamanho)
+        +List<Peca> findByCor(String cor)
+        +List<Peca> findByTipoAndTamanhoAndCor(String tipo, String tamanho, String cor)
+        +List<Peca> findAll()
+        +Peca save(Peca peca)
+        +void deleteById(int id)
     }
 
     class ChaveiroRepository {
         <<interface>>
-        +findAll(): List<Chaveiro>
-        +findById(int): Optional<Chaveiro>
-        +save(Chaveiro): Chaveiro
-        +deleteById(int): void
+        +Optional<Chaveiro> findById(int id)
+        +Optional<Chaveiro> findByChaveiroModelo(String chaveiroModelo)
+        +List<Chaveiro> findByColecao(Colecao colecao)
+        +Optional<Chaveiro> findByChaveiroModeloAndColecao(String chaveiroModelo, Colecao colecao)
+        +List<Chaveiro> findAll()
+        +Chaveiro save(Chaveiro chaveiro)
+        +void deleteById(int id)
     }
 
     class AdesivoRepository {
         <<interface>>
-        +findAll(): List<Adesivo>
-        +findById(int): Optional<Adesivo>
-        +save(Adesivo): Adesivo
-        +deleteById(int): void
+        +List<Adesivo> findAll()
+        +Optional<Adesivo> findById(int id)
+        +Adesivo save(Adesivo adesivo)
+        +void deleteById(int id)
     }
 
     class UsuarioRepository {
         <<interface>>
         +Optional<Usuario> findByNome(String nome)
         +boolean existsByNome(String nome)
-        +Usuario save(Usuario)
-        +void deleteById(int id)
         +Optional<Usuario> findById(int id)
         +List<Usuario> findAll()
+        +Usuario save(Usuario usuario)
+        +void deleteById(int id)
     }
 
     class HistoricoAlteracaoRepository {
@@ -192,113 +206,145 @@ classDiagram
         +List<HistoricoAlteracao> findByEntidadeAndEntidadeId(String entidade, int entidadeId)
         +List<HistoricoAlteracao> findByUsuarioUsuarioId(int usuarioId)
         +List<HistoricoAlteracao> findAllByOrderByDataHoraDesc()
-        +<T extends HistoricoAlteracao> save(T entity)
-        +Optional<HistoricoAlteracao> findById(int id)
+        +boolean existsByUsuarioUsuarioId(int usuarioId)
+        +Optional<HistoricoAlteracao> findById(Long id)
         +List<HistoricoAlteracao> findAll()
-        +void deleteById(int id)
+        +HistoricoAlteracao save(HistoricoAlteracao historico)
+        +void deleteById(Long id)
     }
 
-%%Services
+%% Services
 
     class ColecaoService {
-        - ColecaoRepository repository
-        - ColecaoMapper mapper
+        - ColecaoRepository colecaoRepository
+        - HistoricoAlteracaoService historicoService
         + listarColecoes(): List<ColecaoDTO>
-        + salvarColecao(ColecaoDTO): ColecaoDTO
-        + editarColecao(ColecaoDTO): ColecaoDTO
-        + removerColecao(int): void
+        + buscarPorId(int id): ColecaoDTO
+        + criarColecao(ColecaoDTO dto, Usuario autor): ColecaoDTO
+        + editarColecao(int id, ColecaoDTO dto, Usuario autor): ColecaoDTO
+        + deletarColecao(int id, Usuario autor): void
+        - registrarLog(Integer autorId, String entidade, int entidadeId, String campo, String valorAntigo, String valorNovo): void
     }
 
     class EstampaService {
         - EstampaRepository estampaRepository
-        - EstampaMapper estampaMapper
-        +List<EstampaDTO> getAll()
-        +EstampaDTO getById(int)
-        +EstampaDTO create(EstampaDTO)
-        +EstampaDTO update(int, EstampaDTO)
-        +void delete(int)
+        - ColecaoRepository colecaoRepository
+        - HistoricoAlteracaoService historicoService
+        + listarEstampas(): List<EstampaDTO>
+        + buscarPorId(int id): EstampaDTO
+        + criarEstampa(EstampaDTO dto, Usuario autor): EstampaDTO
+        + editarEstampa(int id, EstampaDTO dto, Usuario autor): EstampaDTO
+        + deletarEstampa(int id, Usuario autor): void
+        - registrarLog(Integer autorId, String entidade, int entidadeId, String campo, String valorAntigo, String valorNovo): void
     }
 
     class PecaService {
         - PecaRepository pecaRepository
-        - PecaMapper pecaMapper
-        +List<PecaDTO> getAll()
-        +PecaDTO getById(int)
-        +PecaDTO create(PecaDTO)
-        +PecaDTO update(int, PecaDTO)
-        +void delete(int)
+        - HistoricoAlteracaoService historicoService
+        + listarPecas(): List<PecaDTO>
+        + buscarPorId(int id): PecaDTO
+        + criarPeca(PecaDTO dto, Usuario autor): PecaDTO
+        + editarPeca(int id, PecaDTO dto, Usuario autor): PecaDTO
+        + deletarPeca(int id, Usuario autor): void
+        - registrarLog(Integer autorId, String entidade, int entidadeId, String campo, String valorAntigo, String valorNovo): void
     }
 
     class ChaveiroService {
         - ChaveiroRepository chaveiroRepository
-        - ChaveiroMapper chaveiroMapper
-        +List<ChaveiroDTO> getAll()
-        +ChaveiroDTO getById(int)
-        +ChaveiroDTO create(ChaveiroDTO)
-        +ChaveiroDTO update(int, ChaveiroDTO)
-        +void delete(int)
+        - ColecaoRepository colecaoRepository
+        - HistoricoAlteracaoService historicoService
+        + listarChaveiros(): List<ChaveiroDTO>
+        + buscarPorId(int id): ChaveiroDTO
+        + criarChaveiro(ChaveiroDTO dto, Usuario autor): ChaveiroDTO
+        + editarChaveiro(int id, ChaveiroDTO dto, Usuario autor): ChaveiroDTO
+        + deletarChaveiro(int id, Usuario autor): void
+        - registrarLog(Integer autorId, String entidade, int entidadeId, String campo, String valorAntigo, String valorNovo): void
     }
 
     class AdesivoService {
         - AdesivoRepository adesivoRepository
-        - AdesivoMapper adesivoMapper
-        +List<AdesivoDTO> getAll()
-        +AdesivoDTO getById(int)
-        +AdesivoDTO create(AdesivoDTO)
-        +AdesivoDTO update(int, AdesivoDTO)
-        +void delete(int)
+        - HistoricoAlteracaoService historicoService
+        + listarAdesivos(): List<AdesivoDTO>
+        + buscarPorId(int id): AdesivoDTO
+        + criarAdesivo(AdesivoDTO dto, Usuario autor): AdesivoDTO
+        + editarAdesivo(int id, AdesivoDTO dto, Usuario autor): AdesivoDTO
+        + deletarAdesivo(int id, Usuario autor): void
+        - registrarLog(Integer autorId, String entidade, int entidadeId, String campo, String valorAntigo, String valorNovo): void
     }
 
     class UsuarioService {
-        +List<UsuarioDTO> listarUsuarios()
-        +UsuarioDTO buscarPorId(int id)
-        +UsuarioDTO criarUsuario(UsuarioDTO dto)
-        +UsuarioDTO editarUsuario(int id, UsuarioDTO dto)
-        +void deletarUsuario(int id)
-        +boolean validarLogin(String nome, String senha)
-        +boolean sistemaSemUsuarios()
-        +UsuarioDTO criarAdminPadrao()
+        - UsuarioRepository usuarioRepository
+        - HistoricoAlteracaoService historicoService
+        - HistoricoAlteracaoRepository historicoRepository
+        - PasswordEncoder passwordEncoder
+        + listarUsuarios(): List<UsuarioDTO>
+        + buscarPorId(int id): UsuarioDTO
+        + criarUsuario(UsuarioDTO dto): UsuarioDTO
+        + criarUsuario(UsuarioDTO dto, Usuario autor): UsuarioDTO
+        + editarUsuario(int id, UsuarioDTO dto): UsuarioDTO
+        + editarUsuario(int id, UsuarioDTO dto, Usuario autor): UsuarioDTO
+        + deletarUsuario(int id): void
+        + deletarUsuario(int id, Usuario autor): void
+        + validarLogin(String nome, String senha): boolean
+        + sistemaSemUsuarios(): boolean
+        + criarAdminPadrao(): UsuarioDTO
+        - logAlteracao(Integer autorId, String entidade, int entidadeId, String campoAlterado, String valorAntigo, String valorNovo): void
     }
 
-%%Mappers
+    class HistoricoAlteracaoService {
+        - HistoricoAlteracaoRepository historicoRepository
+        - UsuarioRepository usuarioRepository
+        + listarAlteracoes(): List<HistoricoAlteracaoDTO>
+        + buscarPorId(Long id): HistoricoAlteracaoDTO
+        + registrarAlteracao(HistoricoAlteracaoDTO dto): void
+    }
+
+%% Mappers
 
     class ColecaoMapper {
+        <<final>>
         + toDTO(Colecao): ColecaoDTO
         + toModel(ColecaoDTO): Colecao
     }
 
-    class EstampaMapper{
-        +Estampa toModel(EstampaDTO): Estampa
-        +EstampaDTO toDTO(Estampa): EstampaDTO
+    class EstampaMapper {
+        <<final>>
+        + toDTO(Estampa): EstampaDTO
+        + toModel(EstampaDTO, Colecao): Estampa
     }
 
     class PecaMapper {
-        +Peca toModel(PecaDTO): Peca
-        +PecaDTO toDTO(Peca): PecaDTO
+        <<final>>
+        + toDTO(Peca): PecaDTO
+        + toModel(PecaDTO): Peca
     }
 
-
     class ChaveiroMapper {
-        +Chaveiro toModel(ChaveiroDTO): Chaveiro
-        +ChaveiroDTO toDTO(Chaveiro): ChaveiroDTO
+        <<final>>
+        + toDTO(Chaveiro): ChaveiroDTO
+        + toModel(ChaveiroDTO, Colecao): Chaveiro
     }
 
     class AdesivoMapper {
-        +Adesivo toModel(AdesivoDTO): Adesivo
-        +AdesivoDTO toDTO(Adesivo): AdesivoDTO
+        <<final>>
+        + toDTO(Adesivo): AdesivoDTO
+        + toModel(AdesivoDTO): Adesivo
     }
 
     class UsuarioMapper {
-        +Usuario toModel(UsuarioDTO dto)
-        +UsuarioDTO toDTO(Usuario entity)
+        <<final>>
+        + toDTO(Usuario): UsuarioDTO
+        + toModel(UsuarioDTO): Usuario
+        + updateModelFromDTO(UsuarioDTO, Usuario): void
     }
 
     class HistoricoAlteracaoMapper {
-        +HistoricoAlteracao toModel(HistoricoAlteracaoDTO dto, Usuario usuario)
-        +HistoricoAlteracaoDTO toDTO(HistoricoAlteracao entity)
+        <<final>>
+        + toDTO(HistoricoAlteracao): HistoricoAlteracaoDTO
+        + toModel(HistoricoAlteracaoDTO, Usuario): HistoricoAlteracao
     }
 
-%%DTOs
+%% DTOs
 
     class ColecaoDTO {
         - int colecaoId
@@ -319,15 +365,15 @@ classDiagram
         - int estampaId
         - String nome
         - int quantidade
-        - int colecaoId
-        +getEstampaId(): int
-        +setEstampaId(int): void
-        +getNome(): String
-        +setNome(String): void
-        +getQuantidade(): int
-        +setQuantidade(int): void
-        +getColecaoId(): int
-        +setColecaoId(int): void
+        - Integer colecaoId
+        + getEstampaId(): int
+        + setEstampaId(int): void
+        + getNome(): String
+        + setNome(String): void
+        + getQuantidade(): int
+        + setQuantidade(int): void
+        + getColecaoId(): Integer
+        + setColecaoId(Integer): void
     }
 
     class PecaDTO {
@@ -336,52 +382,55 @@ classDiagram
         - String tamanho
         - String cor
         - int quantidade
-        +getPecaId(): int
-        +setPecaId(int): void
-        +getTipo(): String
-        +setTipo(String): void
-        +getTamanho(): String
-        +setTamanho(String): void
-        +getCor(): String
-        +setCor(String): void
-        +getQuantidade(): int
-        +setQuantidade(int): void
+        + getPecaId(): int
+        + setPecaId(int): void
+        + getTipo(): String
+        + setTipo(String): void
+        + getTamanho(): String
+        + setTamanho(String): void
+        + getCor(): String
+        + setCor(String): void
+        + getQuantidade(): int
+        + setQuantidade(int): void
     }
 
     class ChaveiroDTO {
         - int chaveiroId
         - String chaveiroModelo
-        - int colecaoId
-        +getChaveiroId(): int
-        +setChaveiroId(int): void
-        +getChaveiroModelo(): String
-        +setChaveiroModelo(String): void
-        +getColecaoId(): int
-        +setColecaoId(int): void
+        - Integer colecaoId
+        + getChaveiroId(): int
+        + setChaveiroId(int): void
+        + getChaveiroModelo(): String
+        + setChaveiroModelo(String): void
+        + getColecaoId(): Integer
+        + setColecaoId(Integer): void
     }
 
     class AdesivoDTO {
         - int adesivoId
         - String adesivoModelo
         - boolean cromatico
-        +getAdesivoId(): int
-        +setAdesivoId(int): void
-        +getAdesivoModelo(): String
-        +setAdesivoModelo(String): void
-        +isCromatico(): boolean
-        +setCromatico(boolean): void
+        + getAdesivoId(): int
+        + setAdesivoId(int): void
+        + getAdesivoModelo(): String
+        + setAdesivoModelo(String): void
+        + isCromatico(): boolean
+        + setCromatico(boolean): void
     }
 
     class UsuarioDTO {
         - int usuarioId
         - String nome
+        - String senha
         - String tipo
-        +getUsuarioId(): int
-        +setUsuarioId(int): void
-        +getNome(): String
-        +setNome(String): void
-        +getTipo(): String
-        +setTipo(String): void
+        + getUsuarioId(): int
+        + setUsuarioId(int): void
+        + getNome(): String
+        + setNome(String): void
+        + getSenha(): String
+        + setSenha(String): void
+        + getTipo(): String
+        + setTipo(String): void
     }
 
     class HistoricoAlteracaoDTO {
@@ -392,7 +441,7 @@ classDiagram
         - String valorAntigo
         - String valorNovo
         - LocalDateTime dataHora
-        - int usuarioId
+        - Integer usuarioId
         + getId(): long
         + setId(long): void
         + getEntidade(): String
@@ -407,115 +456,169 @@ classDiagram
         + setValorNovo(String): void
         + getDataHora(): LocalDateTime
         + setDataHora(LocalDateTime): void
-        + getUsuarioId(): int
-        + setUsuarioId(int): void
+        + getUsuarioId(): Integer
+        + setUsuarioId(Integer): void
     }
 
-
-
-%%Controllers
+%% Controllers
 
     class ColecaoController {
-        - ColecaoService service
-        + getAll(): List<ColecaoDTO>
-        + post(ColecaoDTO): ColecaoDTO
-        + put(ColecaoDTO): ColecaoDTO
-        + delete(int): void
+        - ColecaoService colecaoService
+        - UsuarioRepository usuarioRepository
+        + listarTodas(): ResponseEntity<List<ColecaoDTO>>
+        + buscarPorId(int id): ResponseEntity<ColecaoDTO>
+        + criar(ColecaoDTO dto, Principal principal): ResponseEntity<ColecaoDTO>
+        + editar(int id, ColecaoDTO dto, Principal principal): ResponseEntity<ColecaoDTO>
+        + deletar(int id, Principal principal): ResponseEntity<Void>
+        - getAutor(Principal principal): Usuario
     }
 
     class EstampaController {
         - EstampaService estampaService
-        +List<EstampaDTO> getAll()
-        +EstampaDTO getById(int)
-        +EstampaDTO create(EstampaDTO)
-        +EstampaDTO update(int, EstampaDTO)
-        +void delete(int)
+        - UsuarioRepository usuarioRepository
+        + listarTodas(): ResponseEntity<List<EstampaDTO>>
+        + buscarPorId(int id): ResponseEntity<EstampaDTO>
+        + criar(EstampaDTO dto, Principal principal): ResponseEntity<EstampaDTO>
+        + editar(int id, EstampaDTO dto, Principal principal): ResponseEntity<EstampaDTO>
+        + deletar(int id, Principal principal): ResponseEntity<Void>
+        - getAutor(Principal principal): Usuario
     }
 
     class PecaController {
         - PecaService pecaService
-        +List<PecaDTO> getAll()
-        +PecaDTO getById(int)
-        +PecaDTO create(PecaDTO)
-        +PecaDTO update(int, PecaDTO)
-        +void delete(int)
+        - UsuarioRepository usuarioRepository
+        + listarTodas(): ResponseEntity<List<PecaDTO>>
+        + buscarPorId(int id): ResponseEntity<PecaDTO>
+        + criar(PecaDTO dto, Principal principal): ResponseEntity<PecaDTO>
+        + editar(int id, PecaDTO dto, Principal principal): ResponseEntity<PecaDTO>
+        + deletar(int id, Principal principal): ResponseEntity<Void>
+        - getAutor(Principal principal): Usuario
     }
 
     class ChaveiroController {
         - ChaveiroService chaveiroService
-        +List<ChaveiroDTO> getAll()
-        +ChaveiroDTO getById(int)
-        +ChaveiroDTO create(ChaveiroDTO)
-        +ChaveiroDTO update(int, ChaveiroDTO)
-        +void delete(int)
+        - UsuarioRepository usuarioRepository
+        + listarTodos(): ResponseEntity<List<ChaveiroDTO>>
+        + buscarPorId(int id): ResponseEntity<ChaveiroDTO>
+        + criar(ChaveiroDTO dto, Principal principal): ResponseEntity<ChaveiroDTO>
+        + editar(int id, ChaveiroDTO dto, Principal principal): ResponseEntity<ChaveiroDTO>
+        + deletar(int id, Principal principal): ResponseEntity<Void>
+        - getAutor(Principal principal): Usuario
     }
 
     class AdesivoController {
         - AdesivoService adesivoService
-        +List<AdesivoDTO> getAll()
-        +AdesivoDTO getById(int)
-        +AdesivoDTO create(AdesivoDTO)
-        +AdesivoDTO update(int, AdesivoDTO)
-        +void delete(int)
+        - UsuarioRepository usuarioRepository
+        + listarTodos(): ResponseEntity<List<AdesivoDTO>>
+        + buscarPorId(int id): ResponseEntity<AdesivoDTO>
+        + criar(AdesivoDTO dto, Principal principal): ResponseEntity<AdesivoDTO>
+        + editar(int id, AdesivoDTO dto, Principal principal): ResponseEntity<AdesivoDTO>
+        + deletar(int id, Principal principal): ResponseEntity<Void>
+        - getAutor(Principal principal): Usuario
     }
 
     class UsuarioController {
-        +List<UsuarioDTO> getAll()
-        +UsuarioDTO getById(int id)
-        +UsuarioDTO post(UsuarioDTO dto)
-        +UsuarioDTO put(int id, UsuarioDTO dto)
-        +void delete(int id)
-        +boolean login(String nome, String senha)
-        +void inicializarSistema()
+        - UsuarioService usuarioService
+        - UsuarioRepository usuarioRepository
+        - AuthenticationManager authenticationManager
+        - JwtTokenProvider tokenProvider
+        + listarTodos(): ResponseEntity<List<UsuarioDTO>>
+        + buscarPorId(int id): ResponseEntity<UsuarioDTO>
+        + criar(UsuarioDTO dto, Principal principal): ResponseEntity<UsuarioDTO>
+        + editar(int id, UsuarioDTO dto, Principal principal): ResponseEntity<UsuarioDTO>
+        + deletar(int id, Principal principal): ResponseEntity<Void>
+        + login(LoginRequest loginRequest): ResponseEntity<LoginResponse>
+        + criarAdminInicial(): ResponseEntity<UsuarioDTO>
+        - getAutor(Principal principal): Usuario
     }
 
-%%Relacoes
+    class HistoricoAlteracaoController {
+        - HistoricoAlteracaoService historicoService
+        + getAll(): ResponseEntity<List<HistoricoAlteracaoDTO>>
+        + getById(Long id): ResponseEntity<HistoricoAlteracaoDTO>
+    }
 
-    AdesivoController -->AdesivoService : chama
-    AdesivoService -->AdesivoRepository : persiste/busca
-    AdesivoService -->AdesivoMapper : converteDTO<->Model
-    AdesivoRepository -->Adesivo: trabalha com a entidade
+%% Relações Completas (ATUALIZADO)
+
+%% Fluxo principal do Adesivo (com auditoria)
+    AdesivoController --> AdesivoService : chama
+    AdesivoController --> UsuarioRepository : obtém autor
+    AdesivoService --> AdesivoRepository : persiste/busca
+    AdesivoService --> AdesivoMapper : converteDTO<->Model
+    AdesivoService --> HistoricoAlteracaoService : registra logs
+    AdesivoRepository --> Adesivo: trabalha com a entidade
     AdesivoMapper --> Adesivo
     AdesivoMapper --> AdesivoDTO
 
-    ColecaoController -->ColecaoService : chama
-    ColecaoService -->ColecaoRepository : persiste/busca
-    ColecaoService -->ColecaoMapper : converteDTO<->Model
-    ColecaoRepository -->Colecao: trabalha com a entidade
+%% Fluxo principal da Coleção (com auditoria)
+    ColecaoController --> ColecaoService : chama
+    ColecaoController --> UsuarioRepository : obtém autor
+    ColecaoService --> ColecaoRepository : persiste/busca
+    ColecaoService --> ColecaoMapper : converteDTO<->Model
+    ColecaoService --> HistoricoAlteracaoService : registra logs
+    ColecaoRepository --> Colecao: trabalha com a entidade
     ColecaoMapper --> Colecao
     ColecaoMapper --> ColecaoDTO
 
-    EstampaController -->EstampaService : chama
-    EstampaService -->EstampaRepository : persiste/busca
-    EstampaService -->EstampaMapper : converteDTO<->Model
-    EstampaRepository -->Estampa: trabalha com a entidade
+%% Fluxo principal da Estampa (com auditoria + Coleção)
+    EstampaController --> EstampaService : chama
+    EstampaController --> UsuarioRepository : obtém autor
+    EstampaService --> EstampaRepository : persiste/busca
+    EstampaService --> EstampaMapper : converteDTO<->Model
+    EstampaService --> ColecaoRepository : busca coleção
+    EstampaService --> HistoricoAlteracaoService : registra logs
+    EstampaRepository --> Estampa: trabalha com a entidade
     EstampaMapper --> Estampa
     EstampaMapper --> EstampaDTO
 
-    PecaController -->PecaService : chama
-    PecaService -->PecaRepository : persiste/busca
-    PecaService -->PecaMapper : converteDTO<->Model
-    PecaRepository -->Peca: trabalha com a entidade
-    PecaMapper -->Peca
+%% Fluxo principal da Peça (com auditoria)
+    PecaController --> PecaService : chama
+    PecaController --> UsuarioRepository : obtém autor
+    PecaService --> PecaRepository : persiste/busca
+    PecaService --> PecaMapper : converteDTO<->Model
+    PecaService --> HistoricoAlteracaoService : registra logs
+    PecaRepository --> Peca: trabalha com a entidade
+    PecaMapper --> Peca
     PecaMapper --> PecaDTO
 
-    ChaveiroController -->ChaveiroService : chama
-    ChaveiroService -->ChaveiroRepository : persiste/busca
-    ChaveiroService -->ChaveiroMapper : converteDTO<->Model
-    ChaveiroRepository -->Chaveiro: trabalha com a entidade
+%% Fluxo principal do Chaveiro (com auditoria + Coleção)
+    ChaveiroController --> ChaveiroService : chama
+    ChaveiroController --> UsuarioRepository : obtém autor
+    ChaveiroService --> ChaveiroRepository : persiste/busca
+    ChaveiroService --> ChaveiroMapper : converteDTO<->Model
+    ChaveiroService --> ColecaoRepository : busca coleção
+    ChaveiroService --> HistoricoAlteracaoService : registra logs
+    ChaveiroRepository --> Chaveiro: trabalha com a entidade
     ChaveiroMapper --> Chaveiro
     ChaveiroMapper --> ChaveiroDTO
 
-    UsuarioController -->UsuarioService : chama
-    UsuarioService -->UsuarioRepository : persiste/busca
-    UsuarioService -->UsuarioMapper : converteDTO<->Model
-    UsuarioRepository -->Usuario: trabalha com a entidade
+%% Fluxo principal do Usuário (com segurança + auditoria)
+    UsuarioController --> UsuarioService : chama
+    UsuarioController --> UsuarioRepository : obtém autor
+    UsuarioController --> AuthenticationManager : autentica
+    UsuarioController --> JwtTokenProvider : gera token
+    UsuarioService --> UsuarioRepository : persiste/busca
+    UsuarioService --> UsuarioMapper : converteDTO<->Model
+    UsuarioService --> HistoricoAlteracaoService : registra logs
+    UsuarioService --> HistoricoAlteracaoRepository : verifica histórico
+    UsuarioService --> PasswordEncoder : codifica senha
+    UsuarioRepository --> Usuario: trabalha com a entidade
     UsuarioMapper --> Usuario
     UsuarioMapper --> UsuarioDTO
 
-    HistoricoAlteracaoController -->HistoricoAlteracaoService : chama
-    HistoricoAlteracaoService -->HistoricoAlteracaoRepository : persiste/busca
-    HistoricoAlteracaoService -->HistoricoAlteracaoMapper : converteDTO<->Model
-    HistoricoAlteracaoRepository -->HistoricoAlteracao: trabalha com a entidade
+%% Fluxo principal do Histórico (READ-ONLY)
+    HistoricoAlteracaoController --> HistoricoAlteracaoService : chama
+    HistoricoAlteracaoService --> HistoricoAlteracaoRepository : persiste/busca
+    HistoricoAlteracaoService --> HistoricoAlteracaoMapper : converteDTO<->Model
+    HistoricoAlteracaoService --> UsuarioRepository : busca usuário
+    HistoricoAlteracaoRepository --> HistoricoAlteracao: trabalha com a entidade
     HistoricoAlteracaoMapper --> HistoricoAlteracao
     HistoricoAlteracaoMapper --> HistoricoAlteracaoDTO
+
+%% RELAÇÕES TRANSVERSAIS CRÍTICAS
+    HistoricoAlteracaoService ..> Adesivo : audita
+    HistoricoAlteracaoService ..> Colecao : audita
+    HistoricoAlteracaoService ..> Estampa : audita
+    HistoricoAlteracaoService ..> Peca : audita
+    HistoricoAlteracaoService ..> Chaveiro : audita
+    HistoricoAlteracaoService ..> Usuario : audita

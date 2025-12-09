@@ -1,13 +1,20 @@
 erDiagram
-    COLECAO ||--o{ ESTAMPA : contem
-    COLECAO ||--o{ CHAVEIRO : contem
-    USUARIO ||--o{ HISTORICO_ALTERACAO : registra
+    USUARIO ||--o{ HISTORICO_ALTERACAO : "realiza"
+
+    HISTORICO_ALTERACAO }|..|| PECA : "registra alterações em"
+    HISTORICO_ALTERACAO }|..|| COLECAO : "registra alterações em"
+    HISTORICO_ALTERACAO }|..|| ESTAMPA : "registra alterações em"
+    HISTORICO_ALTERACAO }|..|| ADESIVO : "registra alterações em"
+    HISTORICO_ALTERACAO }|..|| CHAVEIRO : "registra alterações em"
+
+    COLECAO ||--o{ ESTAMPA : "contém"
+    COLECAO ||--o{ CHAVEIRO : "contém"
 
     USUARIO {
         int usuarioId PK
-        string nome
+        string nome UK
         string senha
-        string tipo  "ADMINISTRADOR|FUNCIONARIO"
+        enum tipo "ADMINISTRADOR, FUNCIONARIO"
     }
 
     COLECAO {
@@ -34,7 +41,7 @@ erDiagram
 
     ADESIVO {
         int adesivoId PK
-        string adesivo_modelo
+        string adesivoModelo
         boolean cromatico
     }
 
@@ -45,10 +52,10 @@ erDiagram
     }
 
     HISTORICO_ALTERACAO {
-        int id PK
-        string entidade         "Nome da entidade alterada (ex: 'Peca')"
-        int entidadeId         "ID da entidade alterada"
-        string campoAlterado   "Campo alterado (ex: 'quantidade')"
+        long id PK
+        string entidade "PECA, COLECAO, ESTAMPA, ADESIVO, CHAVEIRO"
+        int entidadeId
+        string campoAlterado
         string valorAntigo
         string valorNovo
         datetime dataHora
